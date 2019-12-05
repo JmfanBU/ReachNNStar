@@ -1,4 +1,6 @@
 # ReachNN*
+A tool for reachability analysis of neural-network controlled systems
+(NNCSs).
 
 ## Installation
 
