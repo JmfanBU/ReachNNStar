@@ -193,10 +193,13 @@ gnuplot FILENAME.plt
 Check the figures in outputs/images
 
 ## Contributors
-Jiameng Fan, Chao Huang, Wenchao Li, Xin Chen, Qi Zhu
+[Jiameng Fan](https://www.jiamengf.com), [Chao Huang](https://chaohuang2018.github.io/main/), [Wenchao Li](http://sites.bu.edu/depend/people/), [Xin Chen](https://udayton.edu/directory/artssciences/computerscience/chen-xin.php), [Qi Zhu](http://users.eecs.northwestern.edu/~qzhu/)
 
 ## References
-C.Huang,J.Fan,W.Li,X.Chen,andQ.Zhu.Reachnn:Reachabilityanalysisofneural-network
-controlled systems. ACM Transactions on Embedded Computing Systems,
-18:1–22, 10 2019. doi:
-10.1145/3358228.[pdf](https://dl.acm.org/citation.cfm?id=3358228)
+C.Huang, J.Fan, W.Li, X.Chen, and Q.Zhu.
+[Reachnn: Reachabilityanalysisofneural-network controlled systems](https://dl.acm.org/citation.cfm?id=3358228).
+ACM Transactions on Embedded Computing Systems, 18:1–22, 10 2019. doi: 10.1145/3358228.
+
+J.Fan, C.Huang, W.Li, X.Chen, and Q.Zhu.
+[Towards Verification-Aware Knowledge Distillation for Neural-Network Controlled Systems](https://c14bd503-27bf-48fd-84d6-d3e32a0824a1.filesusr.com/ugd/290ef0_07128247dc83481e97d03bb91505ec8c.pdf).
+International Conference on Computer Aided Design (ICCAD), November 2019.
