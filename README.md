@@ -3,7 +3,35 @@
 ## Installation
 
 ### Install Dependencies
+Our tool depend on Flow* tool and several python libraries. The following are
+the installation procedure of the dependencies. We provide two ways to
+install dependencies.
 
+#### Up-to-date Installation
+- Install Flow* libraries
+```
+sudo apt-get install libmp3-dev libmpfr-dev libmpfr-doc libmpfr4
+libmpfr4-dbg gsl-bin libgs10-dev bison flex gnuplot-x11 libglpk-dev
+```
+- Install python libraries
+```
+sudo apt-get install pip3-python
+
+sudo pip3 install -U virtualenv
+
+virtualenv --system-site-packages -p python3 ~/venv
+
+source ~/venv/bin/activate
+
+pip install pip --upgrade
+
+pip install tensorflow # or tensorflow-gpu
+
+pip install sympy mpi4py scipy h5py
+
+```
+
+#### Stable Installation
 ```
 cd packages
 
@@ -24,12 +52,12 @@ cd tensorflow
 pip install *.gz
 
 pip install *.whl
- 
+
 cd ../sympy
 
 pip install *.gz
 
-pip install *.whl 
+pip install *.whl
 
 cd ..
 
@@ -37,12 +65,11 @@ pip install mpi4py/mpi4py-3.0.2.tar.gz
 
 pip install scipy/scipy-1.3.1-cp36-cp36m-manylinux1_x86_64.whl
 
-pip install h5py/h5py-2.10.0-cp36-cp36m-manylinux1_x86_64.whl 
-
+pip install h5py/h5py-2.10.0-cp36-cp36m-manylinux1_x86_64.whl
 
 ```
 
-### Compile
+### Compile Flow*
 
 ```
 
