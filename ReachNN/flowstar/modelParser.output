@@ -1,0 +1,3861 @@
+Terminals unused in grammar
+
+   GEQ
+   ASSIGN
+   END
+   MODE
+   PARAAGGREG
+   INTAGGREG
+   TMAGGREG
+   HYBRID
+   QRPRECOND
+   IDPRECOND
+   MODES
+   JUMPS
+   INV
+   GUARD
+   RESET
+   START
+   MAXJMPS
+   HYBRIDFLOW
+   TAYLOR_PICARD
+   TAYLOR_REMAINDER
+   TAYLOR_POLYNOMIAL
+   COMPUTATIONPATHS
+   PAR
+   UNC
+   UNIVARIATE_POLYNOMIAL
+   TIME_INV
+   TIME_VAR
+   STEP
+   TRUE
+   FALSE
+   LINEARCONTINUOUSFLOW
+   MATRIX
+
+
+Grammar
+
+    0 $accept: model $end
+
+    1 model: CONTINUOUS '{' continuous '}' unsafe_setting
+    2      | stateVarDecls plotting ORDER NUM CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}'
+    3      | MULTIVARIATE_POLYNOMIAL '{' multivariate_polynomial '}'
+    4      | EXPRESSION '{' expression '}'
+
+    5 multivariate_polynomial: multivariate_polynomial '+' multivariate_polynomial
+    6                        | multivariate_polynomial '-' multivariate_polynomial
+    7                        | '(' multivariate_polynomial ')'
+    8                        | multivariate_polynomial '*' multivariate_polynomial
+    9                        | multivariate_polynomial '^' NUM
+   10                        | '-' multivariate_polynomial
+   11                        | IDENT
+   12                        | '[' NUM ',' NUM ']'
+   13                        | NUM
+
+   14 univariate_polynomial: univariate_polynomial '+' univariate_polynomial
+   15                      | univariate_polynomial '-' univariate_polynomial
+   16                      | '(' univariate_polynomial ')'
+   17                      | univariate_polynomial '*' univariate_polynomial
+   18                      | univariate_polynomial '^' NUM
+   19                      | '-' univariate_polynomial
+   20                      | IDENT
+   21                      | NUM
+
+   22 expression: expression '+' expression
+   23           | expression '-' expression
+   24           | '(' expression ')'
+   25           | expression '*' expression
+   26           | expression '^' NUM
+   27           | '-' expression
+   28           | IDENT
+   29           | '[' NUM ',' NUM ']'
+   30           | NUM
+   31           | expression '/' expression
+   32           | EXP '(' expression ')'
+   33           | SIN '(' expression ')'
+   34           | COS '(' expression ')'
+   35           | LOG '(' expression ')'
+   36           | SQRT '(' expression ')'
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' ode '}' INIT '{' init '}'
+   38           | stateVarDecls SETTING '{' setting '}' ODE '{' NUM '}' '{' ode '}' INIT '{' init '}'
+   39           | stateVarDecls SETTING '{' setting '}' LTIODE '{' lti_ode '}' INIT '{' init '}'
+   40           | stateVarDecls SETTING '{' setting '}' LTVODE '{' ltv_ode '}' INIT '{' init '}'
+   41           | stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+   42 stateVarDecls: STATEVAR stateIdDeclList
+
+   43 stateIdDeclList: stateIdDeclList ',' IDENT
+   44                | IDENT
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+   46        | FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+   47        | ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+   48 remainder_estimation: REMEST NUM
+   49                     | REMEST '{' remainders '}'
+
+   50 remainders: remainders ',' IDENT ':' '[' NUM ',' NUM ']'
+   51           | IDENT ':' '[' NUM ',' NUM ']'
+
+   52 plotting: GNUPLOT INTERVAL IDENT ',' IDENT
+   53         | GNUPLOT OCTAGON IDENT ',' IDENT
+   54         | GNUPLOT GRID NUM IDENT ',' IDENT
+   55         | MATLAB INTERVAL IDENT ',' IDENT
+   56         | MATLAB OCTAGON IDENT ',' IDENT
+   57         | MATLAB GRID NUM IDENT ',' IDENT
+
+   58 output_env: OUTPUT IDENT
+   59           | PLOT OUTPUT IDENT
+   60           | TM OUTPUT IDENT
+   61           | NOOUTPUT
+
+   62 printing: PRINTON
+   63         | PRINTOFF
+
+   64 ode: ode IDENT '\'' EQ expression
+   65    | %empty
+
+   66 init: set_of_interval_vectors
+   67     | interval_vector
+
+   68 interval_vector: interval_vector IDENT BELONGSTO '[' NUM ',' NUM ']'
+   69                | %empty
+
+   70 set_of_interval_vectors: set_of_interval_vectors '{' interval_vector '}'
+   71                        | '{' interval_vector '}'
+
+   72 unsafe_setting: UNSAFESET '{' constraints '}'
+   73               | %empty
+
+   74 constraints: constraints expression LEQ NUM
+   75            | %empty
+
+   76 tmVarDecls: TMVAR tmIdDeclList
+
+   77 tmIdDeclList: tmIdDeclList ',' IDENT
+   78             | IDENT
+
+   79 continuous_flowpipes: continuous_flowpipes '{' vector_of_Taylor_models domain_setting '}'
+   80                     | '{' vector_of_Taylor_models domain_setting '}'
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT EQ Taylor_model_polynomial '+' '[' NUM ',' NUM ']'
+   82                        | %empty
+
+   83 domain_setting: domain_setting IDENT BELONGSTO '[' NUM ',' NUM ']'
+   84               | IDENT BELONGSTO '[' NUM ',' NUM ']'
+
+   85 Taylor_model_polynomial: Taylor_model_polynomial '+' Taylor_model_polynomial
+   86                        | Taylor_model_polynomial '-' Taylor_model_polynomial
+   87                        | '(' Taylor_model_polynomial ')'
+   88                        | Taylor_model_polynomial '*' Taylor_model_polynomial
+   89                        | Taylor_model_polynomial '^' NUM
+   90                        | '-' Taylor_model_polynomial
+   91                        | IDENT
+   92                        | NUM
+
+   93 lti_ode: lti_ode IDENT '\'' EQ lti_polynomial
+   94        | %empty
+
+   95 lti_polynomial: lti_polynomial '+' lti_term
+   96               | lti_polynomial '-' lti_term
+   97               | '-' lti_term
+   98               | lti_term
+
+   99 lti_term: NUM '*' IDENT
+  100         | IDENT
+  101         | '[' NUM ',' NUM ']'
+  102         | NUM
+
+  103 tv_par_list: tv_par_list ',' IDENT
+  104            | IDENT
+
+  105 ltv_ode: ltv_ode IDENT '\'' EQ ltv_polynomial
+  106        | IDENT '\'' EQ ltv_polynomial
+
+  107 ltv_polynomial: ltv_polynomial '+' ltv_term
+  108               | ltv_polynomial '-' ltv_term
+  109               | '-' ltv_term
+  110               | ltv_term
+
+  111 ltv_term: '(' univariate_polynomial ')' '*' IDENT
+  112         | IDENT
+  113         | '(' univariate_polynomial ')'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\'' (39) 64 93 105 106
+'(' (40) 7 16 24 32 33 34 35 36 87 111 113
+')' (41) 7 16 24 32 33 34 35 36 87 111 113
+'*' (42) 8 17 25 88 99 111
+'+' (43) 5 14 22 81 85 95 107
+',' (44) 12 29 43 46 47 50 51 52 53 54 55 56 57 68 77 81 83 84 101
+    103
+'-' (45) 6 10 15 19 23 27 86 90 96 97 108 109
+'/' (47) 31
+':' (58) 50 51
+'[' (91) 12 29 50 51 68 81 83 84 101
+']' (93) 12 29 50 51 68 81 83 84 101
+'^' (94) 9 18 26 89
+'{' (123) 1 2 3 4 37 38 39 40 41 46 47 49 70 71 72 79 80
+'}' (125) 1 2 3 4 37 38 39 40 41 46 47 49 70 71 72 79 80
+error (256)
+NUM (258) 2 9 12 13 18 21 26 29 30 38 41 45 46 47 48 50 51 54 57 68
+    74 81 83 84 89 92 99 101 102
+IDENT (259) 11 20 28 43 44 50 51 52 53 54 55 56 57 58 59 60 64 68 77
+    78 81 83 84 91 93 99 100 103 104 105 106 111 112
+STATEVAR (260) 42
+TMVAR (261) 76
+TM (262) 60
+EQ (263) 64 81 93 105 106
+GEQ (264)
+LEQ (265) 74
+ASSIGN (266)
+END (267)
+MODE (268)
+INIT (269) 37 38 39 40 41
+BELONGSTO (270) 68 83 84
+PARAAGGREG (271)
+INTAGGREG (272)
+TMAGGREG (273)
+OUTPUT (274) 58 59 60
+NOOUTPUT (275) 61
+CONTINUOUS (276) 1
+HYBRID (277)
+SETTING (278) 37 38 39 40 41
+FIXEDST (279) 45 46
+FIXEDORD (280) 45 47
+ADAPTIVEST (281) 47
+ADAPTIVEORD (282) 46
+ORDER (283) 2
+MIN (284) 46 47
+MAX (285) 46 47
+REMEST (286) 48 49
+INTERVAL (287) 52 55
+OCTAGON (288) 53 56
+GRID (289) 54 57
+PLOT (290) 59
+QRPRECOND (291)
+IDPRECOND (292)
+TIME (293) 45 46 47
+MODES (294)
+JUMPS (295)
+INV (296)
+GUARD (297)
+RESET (298)
+START (299)
+MAXJMPS (300)
+PRINTON (301) 62
+PRINTOFF (302) 63
+UNSAFESET (303) 72
+CONTINUOUSFLOW (304) 2
+HYBRIDFLOW (305)
+TAYLOR_PICARD (306)
+TAYLOR_REMAINDER (307)
+TAYLOR_POLYNOMIAL (308)
+EXP (309) 32
+SIN (310) 33
+COS (311) 34
+LOG (312) 35
+SQRT (313) 36
+ODE (314) 37 38
+CUTOFF (315) 2 45 46 47
+PRECISION (316) 45 46 47
+GNUPLOT (317) 52 53 54
+MATLAB (318) 55 56 57
+COMPUTATIONPATHS (319)
+LTIODE (320) 39
+LTVODE (321) 40 41
+PAR (322)
+UNC (323)
+UNIVARIATE_POLYNOMIAL (324)
+MULTIVARIATE_POLYNOMIAL (325) 3
+TIME_INV (326)
+TIME_VAR (327)
+STEP (328)
+TRUE (329)
+FALSE (330)
+LINEARCONTINUOUSFLOW (331)
+EXPRESSION (332) 4
+MATRIX (333)
+uminus (334)
+
+
+Nonterminals, with rules where they appear
+
+$accept (94)
+    on left: 0
+model (95)
+    on left: 1 2 3 4, on right: 0
+multivariate_polynomial (96)
+    on left: 5 6 7 8 9 10 11 12 13, on right: 3 5 6 7 8 9 10
+univariate_polynomial (97)
+    on left: 14 15 16 17 18 19 20 21, on right: 14 15 16 17 18 19 111
+    113
+expression (98)
+    on left: 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36, on right:
+    4 22 23 24 25 26 27 31 32 33 34 35 36 64 74
+continuous (99)
+    on left: 37 38 39 40 41, on right: 1
+stateVarDecls (100)
+    on left: 42, on right: 2 37 38 39 40 41
+stateIdDeclList (101)
+    on left: 43 44, on right: 42 43
+setting (102)
+    on left: 45 46 47, on right: 37 38 39 40 41
+remainder_estimation (103)
+    on left: 48 49, on right: 45 46 47
+remainders (104)
+    on left: 50 51, on right: 49 50
+plotting (105)
+    on left: 52 53 54 55 56 57, on right: 2 45 46 47
+output_env (106)
+    on left: 58 59 60 61, on right: 2 45 46 47
+printing (107)
+    on left: 62 63, on right: 45 46 47
+ode (108)
+    on left: 64 65, on right: 37 38 64
+init (109)
+    on left: 66 67, on right: 37 38 39 40 41
+interval_vector (110)
+    on left: 68 69, on right: 67 68 70 71
+set_of_interval_vectors (111)
+    on left: 70 71, on right: 66 70
+unsafe_setting (112)
+    on left: 72 73, on right: 1 2
+constraints (113)
+    on left: 74 75, on right: 72 74
+tmVarDecls (114)
+    on left: 76, on right: 2
+tmIdDeclList (115)
+    on left: 77 78, on right: 76 77
+continuous_flowpipes (116)
+    on left: 79 80, on right: 2 79
+vector_of_Taylor_models (117)
+    on left: 81 82, on right: 79 80 81
+domain_setting (118)
+    on left: 83 84, on right: 79 80 83
+Taylor_model_polynomial (119)
+    on left: 85 86 87 88 89 90 91 92, on right: 81 85 86 87 88 89 90
+lti_ode (120)
+    on left: 93 94, on right: 39 93
+lti_polynomial (121)
+    on left: 95 96 97 98, on right: 93 95 96
+lti_term (122)
+    on left: 99 100 101 102, on right: 95 96 97 98
+tv_par_list (123)
+    on left: 103 104, on right: 41 103
+ltv_ode (124)
+    on left: 105 106, on right: 40 41 105
+ltv_polynomial (125)
+    on left: 107 108 109 110, on right: 105 106 107 108
+ltv_term (126)
+    on left: 111 112 113, on right: 107 108 109 110
+
+
+State 0
+
+    0 $accept: . model $end
+
+    STATEVAR                 shift, and go to state 1
+    CONTINUOUS               shift, and go to state 2
+    MULTIVARIATE_POLYNOMIAL  shift, and go to state 3
+    EXPRESSION               shift, and go to state 4
+
+    model          go to state 5
+    stateVarDecls  go to state 6
+
+
+State 1
+
+   42 stateVarDecls: STATEVAR . stateIdDeclList
+
+    IDENT  shift, and go to state 7
+
+    stateIdDeclList  go to state 8
+
+
+State 2
+
+    1 model: CONTINUOUS . '{' continuous '}' unsafe_setting
+
+    '{'  shift, and go to state 9
+
+
+State 3
+
+    3 model: MULTIVARIATE_POLYNOMIAL . '{' multivariate_polynomial '}'
+
+    '{'  shift, and go to state 10
+
+
+State 4
+
+    4 model: EXPRESSION . '{' expression '}'
+
+    '{'  shift, and go to state 11
+
+
+State 5
+
+    0 $accept: model . $end
+
+    $end  shift, and go to state 12
+
+
+State 6
+
+    2 model: stateVarDecls . plotting ORDER NUM CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}'
+
+    GNUPLOT  shift, and go to state 13
+    MATLAB   shift, and go to state 14
+
+    plotting  go to state 15
+
+
+State 7
+
+   44 stateIdDeclList: IDENT .
+
+    $default  reduce using rule 44 (stateIdDeclList)
+
+
+State 8
+
+   42 stateVarDecls: STATEVAR stateIdDeclList .
+   43 stateIdDeclList: stateIdDeclList . ',' IDENT
+
+    ','  shift, and go to state 16
+
+    $default  reduce using rule 42 (stateVarDecls)
+
+
+State 9
+
+    1 model: CONTINUOUS '{' . continuous '}' unsafe_setting
+
+    STATEVAR  shift, and go to state 1
+
+    continuous     go to state 17
+    stateVarDecls  go to state 18
+
+
+State 10
+
+    3 model: MULTIVARIATE_POLYNOMIAL '{' . multivariate_polynomial '}'
+
+    NUM    shift, and go to state 19
+    IDENT  shift, and go to state 20
+    '-'    shift, and go to state 21
+    '('    shift, and go to state 22
+    '['    shift, and go to state 23
+
+    multivariate_polynomial  go to state 24
+
+
+State 11
+
+    4 model: EXPRESSION '{' . expression '}'
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 35
+
+
+State 12
+
+    0 $accept: model $end .
+
+    $default  accept
+
+
+State 13
+
+   52 plotting: GNUPLOT . INTERVAL IDENT ',' IDENT
+   53         | GNUPLOT . OCTAGON IDENT ',' IDENT
+   54         | GNUPLOT . GRID NUM IDENT ',' IDENT
+
+    INTERVAL  shift, and go to state 36
+    OCTAGON   shift, and go to state 37
+    GRID      shift, and go to state 38
+
+
+State 14
+
+   55 plotting: MATLAB . INTERVAL IDENT ',' IDENT
+   56         | MATLAB . OCTAGON IDENT ',' IDENT
+   57         | MATLAB . GRID NUM IDENT ',' IDENT
+
+    INTERVAL  shift, and go to state 39
+    OCTAGON   shift, and go to state 40
+    GRID      shift, and go to state 41
+
+
+State 15
+
+    2 model: stateVarDecls plotting . ORDER NUM CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}'
+
+    ORDER  shift, and go to state 42
+
+
+State 16
+
+   43 stateIdDeclList: stateIdDeclList ',' . IDENT
+
+    IDENT  shift, and go to state 43
+
+
+State 17
+
+    1 model: CONTINUOUS '{' continuous . '}' unsafe_setting
+
+    '}'  shift, and go to state 44
+
+
+State 18
+
+   37 continuous: stateVarDecls . SETTING '{' setting '}' ODE '{' ode '}' INIT '{' init '}'
+   38           | stateVarDecls . SETTING '{' setting '}' ODE '{' NUM '}' '{' ode '}' INIT '{' init '}'
+   39           | stateVarDecls . SETTING '{' setting '}' LTIODE '{' lti_ode '}' INIT '{' init '}'
+   40           | stateVarDecls . SETTING '{' setting '}' LTVODE '{' ltv_ode '}' INIT '{' init '}'
+   41           | stateVarDecls . SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    SETTING  shift, and go to state 45
+
+
+State 19
+
+   13 multivariate_polynomial: NUM .
+
+    $default  reduce using rule 13 (multivariate_polynomial)
+
+
+State 20
+
+   11 multivariate_polynomial: IDENT .
+
+    $default  reduce using rule 11 (multivariate_polynomial)
+
+
+State 21
+
+   10 multivariate_polynomial: '-' . multivariate_polynomial
+
+    NUM    shift, and go to state 19
+    IDENT  shift, and go to state 20
+    '-'    shift, and go to state 21
+    '('    shift, and go to state 22
+    '['    shift, and go to state 23
+
+    multivariate_polynomial  go to state 46
+
+
+State 22
+
+    7 multivariate_polynomial: '(' . multivariate_polynomial ')'
+
+    NUM    shift, and go to state 19
+    IDENT  shift, and go to state 20
+    '-'    shift, and go to state 21
+    '('    shift, and go to state 22
+    '['    shift, and go to state 23
+
+    multivariate_polynomial  go to state 47
+
+
+State 23
+
+   12 multivariate_polynomial: '[' . NUM ',' NUM ']'
+
+    NUM  shift, and go to state 48
+
+
+State 24
+
+    3 model: MULTIVARIATE_POLYNOMIAL '{' multivariate_polynomial . '}'
+    5 multivariate_polynomial: multivariate_polynomial . '+' multivariate_polynomial
+    6                        | multivariate_polynomial . '-' multivariate_polynomial
+    8                        | multivariate_polynomial . '*' multivariate_polynomial
+    9                        | multivariate_polynomial . '^' NUM
+
+    '+'  shift, and go to state 49
+    '-'  shift, and go to state 50
+    '*'  shift, and go to state 51
+    '^'  shift, and go to state 52
+    '}'  shift, and go to state 53
+
+
+State 25
+
+   30 expression: NUM .
+
+    $default  reduce using rule 30 (expression)
+
+
+State 26
+
+   28 expression: IDENT .
+
+    $default  reduce using rule 28 (expression)
+
+
+State 27
+
+   32 expression: EXP . '(' expression ')'
+
+    '('  shift, and go to state 54
+
+
+State 28
+
+   33 expression: SIN . '(' expression ')'
+
+    '('  shift, and go to state 55
+
+
+State 29
+
+   34 expression: COS . '(' expression ')'
+
+    '('  shift, and go to state 56
+
+
+State 30
+
+   35 expression: LOG . '(' expression ')'
+
+    '('  shift, and go to state 57
+
+
+State 31
+
+   36 expression: SQRT . '(' expression ')'
+
+    '('  shift, and go to state 58
+
+
+State 32
+
+   27 expression: '-' . expression
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 59
+
+
+State 33
+
+   24 expression: '(' . expression ')'
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 60
+
+
+State 34
+
+   29 expression: '[' . NUM ',' NUM ']'
+
+    NUM  shift, and go to state 61
+
+
+State 35
+
+    4 model: EXPRESSION '{' expression . '}'
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+
+    '+'  shift, and go to state 62
+    '-'  shift, and go to state 63
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+    '}'  shift, and go to state 67
+
+
+State 36
+
+   52 plotting: GNUPLOT INTERVAL . IDENT ',' IDENT
+
+    IDENT  shift, and go to state 68
+
+
+State 37
+
+   53 plotting: GNUPLOT OCTAGON . IDENT ',' IDENT
+
+    IDENT  shift, and go to state 69
+
+
+State 38
+
+   54 plotting: GNUPLOT GRID . NUM IDENT ',' IDENT
+
+    NUM  shift, and go to state 70
+
+
+State 39
+
+   55 plotting: MATLAB INTERVAL . IDENT ',' IDENT
+
+    IDENT  shift, and go to state 71
+
+
+State 40
+
+   56 plotting: MATLAB OCTAGON . IDENT ',' IDENT
+
+    IDENT  shift, and go to state 72
+
+
+State 41
+
+   57 plotting: MATLAB GRID . NUM IDENT ',' IDENT
+
+    NUM  shift, and go to state 73
+
+
+State 42
+
+    2 model: stateVarDecls plotting ORDER . NUM CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}'
+
+    NUM  shift, and go to state 74
+
+
+State 43
+
+   43 stateIdDeclList: stateIdDeclList ',' IDENT .
+
+    $default  reduce using rule 43 (stateIdDeclList)
+
+
+State 44
+
+    1 model: CONTINUOUS '{' continuous '}' . unsafe_setting
+
+    UNSAFESET  shift, and go to state 75
+
+    $default  reduce using rule 73 (unsafe_setting)
+
+    unsafe_setting  go to state 76
+
+
+State 45
+
+   37 continuous: stateVarDecls SETTING . '{' setting '}' ODE '{' ode '}' INIT '{' init '}'
+   38           | stateVarDecls SETTING . '{' setting '}' ODE '{' NUM '}' '{' ode '}' INIT '{' init '}'
+   39           | stateVarDecls SETTING . '{' setting '}' LTIODE '{' lti_ode '}' INIT '{' init '}'
+   40           | stateVarDecls SETTING . '{' setting '}' LTVODE '{' ltv_ode '}' INIT '{' init '}'
+   41           | stateVarDecls SETTING . '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    '{'  shift, and go to state 77
+
+
+State 46
+
+    5 multivariate_polynomial: multivariate_polynomial . '+' multivariate_polynomial
+    6                        | multivariate_polynomial . '-' multivariate_polynomial
+    8                        | multivariate_polynomial . '*' multivariate_polynomial
+    9                        | multivariate_polynomial . '^' NUM
+   10                        | '-' multivariate_polynomial .
+
+    '^'  shift, and go to state 52
+
+    $default  reduce using rule 10 (multivariate_polynomial)
+
+
+State 47
+
+    5 multivariate_polynomial: multivariate_polynomial . '+' multivariate_polynomial
+    6                        | multivariate_polynomial . '-' multivariate_polynomial
+    7                        | '(' multivariate_polynomial . ')'
+    8                        | multivariate_polynomial . '*' multivariate_polynomial
+    9                        | multivariate_polynomial . '^' NUM
+
+    '+'  shift, and go to state 49
+    '-'  shift, and go to state 50
+    '*'  shift, and go to state 51
+    '^'  shift, and go to state 52
+    ')'  shift, and go to state 78
+
+
+State 48
+
+   12 multivariate_polynomial: '[' NUM . ',' NUM ']'
+
+    ','  shift, and go to state 79
+
+
+State 49
+
+    5 multivariate_polynomial: multivariate_polynomial '+' . multivariate_polynomial
+
+    NUM    shift, and go to state 19
+    IDENT  shift, and go to state 20
+    '-'    shift, and go to state 21
+    '('    shift, and go to state 22
+    '['    shift, and go to state 23
+
+    multivariate_polynomial  go to state 80
+
+
+State 50
+
+    6 multivariate_polynomial: multivariate_polynomial '-' . multivariate_polynomial
+
+    NUM    shift, and go to state 19
+    IDENT  shift, and go to state 20
+    '-'    shift, and go to state 21
+    '('    shift, and go to state 22
+    '['    shift, and go to state 23
+
+    multivariate_polynomial  go to state 81
+
+
+State 51
+
+    8 multivariate_polynomial: multivariate_polynomial '*' . multivariate_polynomial
+
+    NUM    shift, and go to state 19
+    IDENT  shift, and go to state 20
+    '-'    shift, and go to state 21
+    '('    shift, and go to state 22
+    '['    shift, and go to state 23
+
+    multivariate_polynomial  go to state 82
+
+
+State 52
+
+    9 multivariate_polynomial: multivariate_polynomial '^' . NUM
+
+    NUM  shift, and go to state 83
+
+
+State 53
+
+    3 model: MULTIVARIATE_POLYNOMIAL '{' multivariate_polynomial '}' .
+
+    $default  reduce using rule 3 (model)
+
+
+State 54
+
+   32 expression: EXP '(' . expression ')'
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 84
+
+
+State 55
+
+   33 expression: SIN '(' . expression ')'
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 85
+
+
+State 56
+
+   34 expression: COS '(' . expression ')'
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 86
+
+
+State 57
+
+   35 expression: LOG '(' . expression ')'
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 87
+
+
+State 58
+
+   36 expression: SQRT '(' . expression ')'
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 88
+
+
+State 59
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   27           | '-' expression .
+   31           | expression . '/' expression
+
+    '^'  shift, and go to state 66
+
+    $default  reduce using rule 27 (expression)
+
+
+State 60
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   24           | '(' expression . ')'
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+
+    '+'  shift, and go to state 62
+    '-'  shift, and go to state 63
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+    ')'  shift, and go to state 89
+
+
+State 61
+
+   29 expression: '[' NUM . ',' NUM ']'
+
+    ','  shift, and go to state 90
+
+
+State 62
+
+   22 expression: expression '+' . expression
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 91
+
+
+State 63
+
+   23 expression: expression '-' . expression
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 92
+
+
+State 64
+
+   25 expression: expression '*' . expression
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 93
+
+
+State 65
+
+   31 expression: expression '/' . expression
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 94
+
+
+State 66
+
+   26 expression: expression '^' . NUM
+
+    NUM  shift, and go to state 95
+
+
+State 67
+
+    4 model: EXPRESSION '{' expression '}' .
+
+    $default  reduce using rule 4 (model)
+
+
+State 68
+
+   52 plotting: GNUPLOT INTERVAL IDENT . ',' IDENT
+
+    ','  shift, and go to state 96
+
+
+State 69
+
+   53 plotting: GNUPLOT OCTAGON IDENT . ',' IDENT
+
+    ','  shift, and go to state 97
+
+
+State 70
+
+   54 plotting: GNUPLOT GRID NUM . IDENT ',' IDENT
+
+    IDENT  shift, and go to state 98
+
+
+State 71
+
+   55 plotting: MATLAB INTERVAL IDENT . ',' IDENT
+
+    ','  shift, and go to state 99
+
+
+State 72
+
+   56 plotting: MATLAB OCTAGON IDENT . ',' IDENT
+
+    ','  shift, and go to state 100
+
+
+State 73
+
+   57 plotting: MATLAB GRID NUM . IDENT ',' IDENT
+
+    IDENT  shift, and go to state 101
+
+
+State 74
+
+    2 model: stateVarDecls plotting ORDER NUM . CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}'
+
+    CUTOFF  shift, and go to state 102
+
+
+State 75
+
+   72 unsafe_setting: UNSAFESET . '{' constraints '}'
+
+    '{'  shift, and go to state 103
+
+
+State 76
+
+    1 model: CONTINUOUS '{' continuous '}' unsafe_setting .
+
+    $default  reduce using rule 1 (model)
+
+
+State 77
+
+   37 continuous: stateVarDecls SETTING '{' . setting '}' ODE '{' ode '}' INIT '{' init '}'
+   38           | stateVarDecls SETTING '{' . setting '}' ODE '{' NUM '}' '{' ode '}' INIT '{' init '}'
+   39           | stateVarDecls SETTING '{' . setting '}' LTIODE '{' lti_ode '}' INIT '{' init '}'
+   40           | stateVarDecls SETTING '{' . setting '}' LTVODE '{' ltv_ode '}' INIT '{' init '}'
+   41           | stateVarDecls SETTING '{' . setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    FIXEDST     shift, and go to state 104
+    ADAPTIVEST  shift, and go to state 105
+
+    setting  go to state 106
+
+
+State 78
+
+    7 multivariate_polynomial: '(' multivariate_polynomial ')' .
+
+    $default  reduce using rule 7 (multivariate_polynomial)
+
+
+State 79
+
+   12 multivariate_polynomial: '[' NUM ',' . NUM ']'
+
+    NUM  shift, and go to state 107
+
+
+State 80
+
+    5 multivariate_polynomial: multivariate_polynomial . '+' multivariate_polynomial
+    5                        | multivariate_polynomial '+' multivariate_polynomial .
+    6                        | multivariate_polynomial . '-' multivariate_polynomial
+    8                        | multivariate_polynomial . '*' multivariate_polynomial
+    9                        | multivariate_polynomial . '^' NUM
+
+    '*'  shift, and go to state 51
+    '^'  shift, and go to state 52
+
+    $default  reduce using rule 5 (multivariate_polynomial)
+
+
+State 81
+
+    5 multivariate_polynomial: multivariate_polynomial . '+' multivariate_polynomial
+    6                        | multivariate_polynomial . '-' multivariate_polynomial
+    6                        | multivariate_polynomial '-' multivariate_polynomial .
+    8                        | multivariate_polynomial . '*' multivariate_polynomial
+    9                        | multivariate_polynomial . '^' NUM
+
+    '*'  shift, and go to state 51
+    '^'  shift, and go to state 52
+
+    $default  reduce using rule 6 (multivariate_polynomial)
+
+
+State 82
+
+    5 multivariate_polynomial: multivariate_polynomial . '+' multivariate_polynomial
+    6                        | multivariate_polynomial . '-' multivariate_polynomial
+    8                        | multivariate_polynomial . '*' multivariate_polynomial
+    8                        | multivariate_polynomial '*' multivariate_polynomial .
+    9                        | multivariate_polynomial . '^' NUM
+
+    '^'  shift, and go to state 52
+
+    $default  reduce using rule 8 (multivariate_polynomial)
+
+
+State 83
+
+    9 multivariate_polynomial: multivariate_polynomial '^' NUM .
+
+    $default  reduce using rule 9 (multivariate_polynomial)
+
+
+State 84
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+   32           | EXP '(' expression . ')'
+
+    '+'  shift, and go to state 62
+    '-'  shift, and go to state 63
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+    ')'  shift, and go to state 108
+
+
+State 85
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+   33           | SIN '(' expression . ')'
+
+    '+'  shift, and go to state 62
+    '-'  shift, and go to state 63
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+    ')'  shift, and go to state 109
+
+
+State 86
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+   34           | COS '(' expression . ')'
+
+    '+'  shift, and go to state 62
+    '-'  shift, and go to state 63
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+    ')'  shift, and go to state 110
+
+
+State 87
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+   35           | LOG '(' expression . ')'
+
+    '+'  shift, and go to state 62
+    '-'  shift, and go to state 63
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+    ')'  shift, and go to state 111
+
+
+State 88
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+   36           | SQRT '(' expression . ')'
+
+    '+'  shift, and go to state 62
+    '-'  shift, and go to state 63
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+    ')'  shift, and go to state 112
+
+
+State 89
+
+   24 expression: '(' expression ')' .
+
+    $default  reduce using rule 24 (expression)
+
+
+State 90
+
+   29 expression: '[' NUM ',' . NUM ']'
+
+    NUM  shift, and go to state 113
+
+
+State 91
+
+   22 expression: expression . '+' expression
+   22           | expression '+' expression .
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+
+    $default  reduce using rule 22 (expression)
+
+
+State 92
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   23           | expression '-' expression .
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+
+    $default  reduce using rule 23 (expression)
+
+
+State 93
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   25           | expression '*' expression .
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+
+    '^'  shift, and go to state 66
+
+    $default  reduce using rule 25 (expression)
+
+
+State 94
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+   31           | expression '/' expression .
+
+    '^'  shift, and go to state 66
+
+    $default  reduce using rule 31 (expression)
+
+
+State 95
+
+   26 expression: expression '^' NUM .
+
+    $default  reduce using rule 26 (expression)
+
+
+State 96
+
+   52 plotting: GNUPLOT INTERVAL IDENT ',' . IDENT
+
+    IDENT  shift, and go to state 114
+
+
+State 97
+
+   53 plotting: GNUPLOT OCTAGON IDENT ',' . IDENT
+
+    IDENT  shift, and go to state 115
+
+
+State 98
+
+   54 plotting: GNUPLOT GRID NUM IDENT . ',' IDENT
+
+    ','  shift, and go to state 116
+
+
+State 99
+
+   55 plotting: MATLAB INTERVAL IDENT ',' . IDENT
+
+    IDENT  shift, and go to state 117
+
+
+State 100
+
+   56 plotting: MATLAB OCTAGON IDENT ',' . IDENT
+
+    IDENT  shift, and go to state 118
+
+
+State 101
+
+   57 plotting: MATLAB GRID NUM IDENT . ',' IDENT
+
+    ','  shift, and go to state 119
+
+
+State 102
+
+    2 model: stateVarDecls plotting ORDER NUM CUTOFF . NUM output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}'
+
+    NUM  shift, and go to state 120
+
+
+State 103
+
+   72 unsafe_setting: UNSAFESET '{' . constraints '}'
+
+    $default  reduce using rule 75 (constraints)
+
+    constraints  go to state 121
+
+
+State 104
+
+   45 setting: FIXEDST . NUM TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+   46        | FIXEDST . NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 122
+
+
+State 105
+
+   47 setting: ADAPTIVEST . '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    '{'  shift, and go to state 123
+
+
+State 106
+
+   37 continuous: stateVarDecls SETTING '{' setting . '}' ODE '{' ode '}' INIT '{' init '}'
+   38           | stateVarDecls SETTING '{' setting . '}' ODE '{' NUM '}' '{' ode '}' INIT '{' init '}'
+   39           | stateVarDecls SETTING '{' setting . '}' LTIODE '{' lti_ode '}' INIT '{' init '}'
+   40           | stateVarDecls SETTING '{' setting . '}' LTVODE '{' ltv_ode '}' INIT '{' init '}'
+   41           | stateVarDecls SETTING '{' setting . '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    '}'  shift, and go to state 124
+
+
+State 107
+
+   12 multivariate_polynomial: '[' NUM ',' NUM . ']'
+
+    ']'  shift, and go to state 125
+
+
+State 108
+
+   32 expression: EXP '(' expression ')' .
+
+    $default  reduce using rule 32 (expression)
+
+
+State 109
+
+   33 expression: SIN '(' expression ')' .
+
+    $default  reduce using rule 33 (expression)
+
+
+State 110
+
+   34 expression: COS '(' expression ')' .
+
+    $default  reduce using rule 34 (expression)
+
+
+State 111
+
+   35 expression: LOG '(' expression ')' .
+
+    $default  reduce using rule 35 (expression)
+
+
+State 112
+
+   36 expression: SQRT '(' expression ')' .
+
+    $default  reduce using rule 36 (expression)
+
+
+State 113
+
+   29 expression: '[' NUM ',' NUM . ']'
+
+    ']'  shift, and go to state 126
+
+
+State 114
+
+   52 plotting: GNUPLOT INTERVAL IDENT ',' IDENT .
+
+    $default  reduce using rule 52 (plotting)
+
+
+State 115
+
+   53 plotting: GNUPLOT OCTAGON IDENT ',' IDENT .
+
+    $default  reduce using rule 53 (plotting)
+
+
+State 116
+
+   54 plotting: GNUPLOT GRID NUM IDENT ',' . IDENT
+
+    IDENT  shift, and go to state 127
+
+
+State 117
+
+   55 plotting: MATLAB INTERVAL IDENT ',' IDENT .
+
+    $default  reduce using rule 55 (plotting)
+
+
+State 118
+
+   56 plotting: MATLAB OCTAGON IDENT ',' IDENT .
+
+    $default  reduce using rule 56 (plotting)
+
+
+State 119
+
+   57 plotting: MATLAB GRID NUM IDENT ',' . IDENT
+
+    IDENT  shift, and go to state 128
+
+
+State 120
+
+    2 model: stateVarDecls plotting ORDER NUM CUTOFF NUM . output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}'
+
+    TM        shift, and go to state 129
+    OUTPUT    shift, and go to state 130
+    NOOUTPUT  shift, and go to state 131
+    PLOT      shift, and go to state 132
+
+    output_env  go to state 133
+
+
+State 121
+
+   72 unsafe_setting: UNSAFESET '{' constraints . '}'
+   74 constraints: constraints . expression LEQ NUM
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '}'    shift, and go to state 134
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 135
+
+
+State 122
+
+   45 setting: FIXEDST NUM . TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+   46        | FIXEDST NUM . TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    TIME  shift, and go to state 136
+
+
+State 123
+
+   47 setting: ADAPTIVEST '{' . MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    MIN  shift, and go to state 137
+
+
+State 124
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' . ODE '{' ode '}' INIT '{' init '}'
+   38           | stateVarDecls SETTING '{' setting '}' . ODE '{' NUM '}' '{' ode '}' INIT '{' init '}'
+   39           | stateVarDecls SETTING '{' setting '}' . LTIODE '{' lti_ode '}' INIT '{' init '}'
+   40           | stateVarDecls SETTING '{' setting '}' . LTVODE '{' ltv_ode '}' INIT '{' init '}'
+   41           | stateVarDecls SETTING '{' setting '}' . LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    ODE     shift, and go to state 138
+    LTIODE  shift, and go to state 139
+    LTVODE  shift, and go to state 140
+
+
+State 125
+
+   12 multivariate_polynomial: '[' NUM ',' NUM ']' .
+
+    $default  reduce using rule 12 (multivariate_polynomial)
+
+
+State 126
+
+   29 expression: '[' NUM ',' NUM ']' .
+
+    $default  reduce using rule 29 (expression)
+
+
+State 127
+
+   54 plotting: GNUPLOT GRID NUM IDENT ',' IDENT .
+
+    $default  reduce using rule 54 (plotting)
+
+
+State 128
+
+   57 plotting: MATLAB GRID NUM IDENT ',' IDENT .
+
+    $default  reduce using rule 57 (plotting)
+
+
+State 129
+
+   60 output_env: TM . OUTPUT IDENT
+
+    OUTPUT  shift, and go to state 141
+
+
+State 130
+
+   58 output_env: OUTPUT . IDENT
+
+    IDENT  shift, and go to state 142
+
+
+State 131
+
+   61 output_env: NOOUTPUT .
+
+    $default  reduce using rule 61 (output_env)
+
+
+State 132
+
+   59 output_env: PLOT . OUTPUT IDENT
+
+    OUTPUT  shift, and go to state 143
+
+
+State 133
+
+    2 model: stateVarDecls plotting ORDER NUM CUTOFF NUM output_env . unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}'
+
+    UNSAFESET  shift, and go to state 75
+
+    $default  reduce using rule 73 (unsafe_setting)
+
+    unsafe_setting  go to state 144
+
+
+State 134
+
+   72 unsafe_setting: UNSAFESET '{' constraints '}' .
+
+    $default  reduce using rule 72 (unsafe_setting)
+
+
+State 135
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+   74 constraints: constraints expression . LEQ NUM
+
+    LEQ  shift, and go to state 145
+    '+'  shift, and go to state 62
+    '-'  shift, and go to state 63
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+
+
+State 136
+
+   45 setting: FIXEDST NUM TIME . NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+   46        | FIXEDST NUM TIME . NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 146
+
+
+State 137
+
+   47 setting: ADAPTIVEST '{' MIN . NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 147
+
+
+State 138
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' ODE . '{' ode '}' INIT '{' init '}'
+   38           | stateVarDecls SETTING '{' setting '}' ODE . '{' NUM '}' '{' ode '}' INIT '{' init '}'
+
+    '{'  shift, and go to state 148
+
+
+State 139
+
+   39 continuous: stateVarDecls SETTING '{' setting '}' LTIODE . '{' lti_ode '}' INIT '{' init '}'
+
+    '{'  shift, and go to state 149
+
+
+State 140
+
+   40 continuous: stateVarDecls SETTING '{' setting '}' LTVODE . '{' ltv_ode '}' INIT '{' init '}'
+   41           | stateVarDecls SETTING '{' setting '}' LTVODE . '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    '{'  shift, and go to state 150
+
+
+State 141
+
+   60 output_env: TM OUTPUT . IDENT
+
+    IDENT  shift, and go to state 151
+
+
+State 142
+
+   58 output_env: OUTPUT IDENT .
+
+    $default  reduce using rule 58 (output_env)
+
+
+State 143
+
+   59 output_env: PLOT OUTPUT . IDENT
+
+    IDENT  shift, and go to state 152
+
+
+State 144
+
+    2 model: stateVarDecls plotting ORDER NUM CUTOFF NUM output_env unsafe_setting . CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}'
+
+    CONTINUOUSFLOW  shift, and go to state 153
+
+
+State 145
+
+   74 constraints: constraints expression LEQ . NUM
+
+    NUM  shift, and go to state 154
+
+
+State 146
+
+   45 setting: FIXEDST NUM TIME NUM . remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+   46        | FIXEDST NUM TIME NUM . remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    REMEST  shift, and go to state 155
+
+    remainder_estimation  go to state 156
+
+
+State 147
+
+   47 setting: ADAPTIVEST '{' MIN NUM . ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    ','  shift, and go to state 157
+
+
+State 148
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' . ode '}' INIT '{' init '}'
+   38           | stateVarDecls SETTING '{' setting '}' ODE '{' . NUM '}' '{' ode '}' INIT '{' init '}'
+
+    NUM  shift, and go to state 158
+
+    $default  reduce using rule 65 (ode)
+
+    ode  go to state 159
+
+
+State 149
+
+   39 continuous: stateVarDecls SETTING '{' setting '}' LTIODE '{' . lti_ode '}' INIT '{' init '}'
+
+    $default  reduce using rule 94 (lti_ode)
+
+    lti_ode  go to state 160
+
+
+State 150
+
+   40 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' . ltv_ode '}' INIT '{' init '}'
+   41           | stateVarDecls SETTING '{' setting '}' LTVODE '{' . tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    IDENT  shift, and go to state 161
+
+    tv_par_list  go to state 162
+    ltv_ode      go to state 163
+
+
+State 151
+
+   60 output_env: TM OUTPUT IDENT .
+
+    $default  reduce using rule 60 (output_env)
+
+
+State 152
+
+   59 output_env: PLOT OUTPUT IDENT .
+
+    $default  reduce using rule 59 (output_env)
+
+
+State 153
+
+    2 model: stateVarDecls plotting ORDER NUM CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW . '{' tmVarDecls continuous_flowpipes '}'
+
+    '{'  shift, and go to state 164
+
+
+State 154
+
+   74 constraints: constraints expression LEQ NUM .
+
+    $default  reduce using rule 74 (constraints)
+
+
+State 155
+
+   48 remainder_estimation: REMEST . NUM
+   49                     | REMEST . '{' remainders '}'
+
+    NUM  shift, and go to state 165
+    '{'  shift, and go to state 166
+
+
+State 156
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation . plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+   46        | FIXEDST NUM TIME NUM remainder_estimation . plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    GNUPLOT  shift, and go to state 13
+    MATLAB   shift, and go to state 14
+
+    plotting  go to state 167
+
+
+State 157
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' . MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    MAX  shift, and go to state 168
+
+
+State 158
+
+   38 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' NUM . '}' '{' ode '}' INIT '{' init '}'
+
+    '}'  shift, and go to state 169
+
+
+State 159
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' ode . '}' INIT '{' init '}'
+   64 ode: ode . IDENT '\'' EQ expression
+
+    IDENT  shift, and go to state 170
+    '}'    shift, and go to state 171
+
+
+State 160
+
+   39 continuous: stateVarDecls SETTING '{' setting '}' LTIODE '{' lti_ode . '}' INIT '{' init '}'
+   93 lti_ode: lti_ode . IDENT '\'' EQ lti_polynomial
+
+    IDENT  shift, and go to state 172
+    '}'    shift, and go to state 173
+
+
+State 161
+
+  104 tv_par_list: IDENT .
+  106 ltv_ode: IDENT . '\'' EQ ltv_polynomial
+
+    '\''  shift, and go to state 174
+
+    $default  reduce using rule 104 (tv_par_list)
+
+
+State 162
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list . '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+  103 tv_par_list: tv_par_list . ',' IDENT
+
+    '}'  shift, and go to state 175
+    ','  shift, and go to state 176
+
+
+State 163
+
+   40 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' ltv_ode . '}' INIT '{' init '}'
+  105 ltv_ode: ltv_ode . IDENT '\'' EQ ltv_polynomial
+
+    IDENT  shift, and go to state 177
+    '}'    shift, and go to state 178
+
+
+State 164
+
+    2 model: stateVarDecls plotting ORDER NUM CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW '{' . tmVarDecls continuous_flowpipes '}'
+
+    TMVAR  shift, and go to state 179
+
+    tmVarDecls  go to state 180
+
+
+State 165
+
+   48 remainder_estimation: REMEST NUM .
+
+    $default  reduce using rule 48 (remainder_estimation)
+
+
+State 166
+
+   49 remainder_estimation: REMEST '{' . remainders '}'
+
+    IDENT  shift, and go to state 181
+
+    remainders  go to state 182
+
+
+State 167
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting . FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+   46        | FIXEDST NUM TIME NUM remainder_estimation plotting . ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    FIXEDORD     shift, and go to state 183
+    ADAPTIVEORD  shift, and go to state 184
+
+
+State 168
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX . NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 185
+
+
+State 169
+
+   38 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' NUM '}' . '{' ode '}' INIT '{' init '}'
+
+    '{'  shift, and go to state 186
+
+
+State 170
+
+   64 ode: ode IDENT . '\'' EQ expression
+
+    '\''  shift, and go to state 187
+
+
+State 171
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' ode '}' . INIT '{' init '}'
+
+    INIT  shift, and go to state 188
+
+
+State 172
+
+   93 lti_ode: lti_ode IDENT . '\'' EQ lti_polynomial
+
+    '\''  shift, and go to state 189
+
+
+State 173
+
+   39 continuous: stateVarDecls SETTING '{' setting '}' LTIODE '{' lti_ode '}' . INIT '{' init '}'
+
+    INIT  shift, and go to state 190
+
+
+State 174
+
+  106 ltv_ode: IDENT '\'' . EQ ltv_polynomial
+
+    EQ  shift, and go to state 191
+
+
+State 175
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' . '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    '{'  shift, and go to state 192
+
+
+State 176
+
+  103 tv_par_list: tv_par_list ',' . IDENT
+
+    IDENT  shift, and go to state 193
+
+
+State 177
+
+  105 ltv_ode: ltv_ode IDENT . '\'' EQ ltv_polynomial
+
+    '\''  shift, and go to state 194
+
+
+State 178
+
+   40 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' ltv_ode '}' . INIT '{' init '}'
+
+    INIT  shift, and go to state 195
+
+
+State 179
+
+   76 tmVarDecls: TMVAR . tmIdDeclList
+
+    IDENT  shift, and go to state 196
+
+    tmIdDeclList  go to state 197
+
+
+State 180
+
+    2 model: stateVarDecls plotting ORDER NUM CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls . continuous_flowpipes '}'
+
+    '{'  shift, and go to state 198
+
+    continuous_flowpipes  go to state 199
+
+
+State 181
+
+   51 remainders: IDENT . ':' '[' NUM ',' NUM ']'
+
+    ':'  shift, and go to state 200
+
+
+State 182
+
+   49 remainder_estimation: REMEST '{' remainders . '}'
+   50 remainders: remainders . ',' IDENT ':' '[' NUM ',' NUM ']'
+
+    '}'  shift, and go to state 201
+    ','  shift, and go to state 202
+
+
+State 183
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting FIXEDORD . NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 203
+
+
+State 184
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD . '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    '{'  shift, and go to state 204
+
+
+State 185
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM . '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    '}'  shift, and go to state 205
+
+
+State 186
+
+   38 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' NUM '}' '{' . ode '}' INIT '{' init '}'
+
+    $default  reduce using rule 65 (ode)
+
+    ode  go to state 206
+
+
+State 187
+
+   64 ode: ode IDENT '\'' . EQ expression
+
+    EQ  shift, and go to state 207
+
+
+State 188
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' ode '}' INIT . '{' init '}'
+
+    '{'  shift, and go to state 208
+
+
+State 189
+
+   93 lti_ode: lti_ode IDENT '\'' . EQ lti_polynomial
+
+    EQ  shift, and go to state 209
+
+
+State 190
+
+   39 continuous: stateVarDecls SETTING '{' setting '}' LTIODE '{' lti_ode '}' INIT . '{' init '}'
+
+    '{'  shift, and go to state 210
+
+
+State 191
+
+  106 ltv_ode: IDENT '\'' EQ . ltv_polynomial
+
+    IDENT  shift, and go to state 211
+    '-'    shift, and go to state 212
+    '('    shift, and go to state 213
+
+    ltv_polynomial  go to state 214
+    ltv_term        go to state 215
+
+
+State 192
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' . NUM '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    NUM  shift, and go to state 216
+
+
+State 193
+
+  103 tv_par_list: tv_par_list ',' IDENT .
+
+    $default  reduce using rule 103 (tv_par_list)
+
+
+State 194
+
+  105 ltv_ode: ltv_ode IDENT '\'' . EQ ltv_polynomial
+
+    EQ  shift, and go to state 217
+
+
+State 195
+
+   40 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' ltv_ode '}' INIT . '{' init '}'
+
+    '{'  shift, and go to state 218
+
+
+State 196
+
+   78 tmIdDeclList: IDENT .
+
+    $default  reduce using rule 78 (tmIdDeclList)
+
+
+State 197
+
+   76 tmVarDecls: TMVAR tmIdDeclList .
+   77 tmIdDeclList: tmIdDeclList . ',' IDENT
+
+    ','  shift, and go to state 219
+
+    $default  reduce using rule 76 (tmVarDecls)
+
+
+State 198
+
+   80 continuous_flowpipes: '{' . vector_of_Taylor_models domain_setting '}'
+
+    $default  reduce using rule 82 (vector_of_Taylor_models)
+
+    vector_of_Taylor_models  go to state 220
+
+
+State 199
+
+    2 model: stateVarDecls plotting ORDER NUM CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes . '}'
+   79 continuous_flowpipes: continuous_flowpipes . '{' vector_of_Taylor_models domain_setting '}'
+
+    '{'  shift, and go to state 221
+    '}'  shift, and go to state 222
+
+
+State 200
+
+   51 remainders: IDENT ':' . '[' NUM ',' NUM ']'
+
+    '['  shift, and go to state 223
+
+
+State 201
+
+   49 remainder_estimation: REMEST '{' remainders '}' .
+
+    $default  reduce using rule 49 (remainder_estimation)
+
+
+State 202
+
+   50 remainders: remainders ',' . IDENT ':' '[' NUM ',' NUM ']'
+
+    IDENT  shift, and go to state 224
+
+
+State 203
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting FIXEDORD NUM . CUTOFF NUM PRECISION NUM output_env printing
+
+    CUTOFF  shift, and go to state 225
+
+
+State 204
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' . MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    MIN  shift, and go to state 226
+
+
+State 205
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' . TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    TIME  shift, and go to state 227
+
+
+State 206
+
+   38 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' NUM '}' '{' ode . '}' INIT '{' init '}'
+   64 ode: ode . IDENT '\'' EQ expression
+
+    IDENT  shift, and go to state 170
+    '}'    shift, and go to state 228
+
+
+State 207
+
+   64 ode: ode IDENT '\'' EQ . expression
+
+    NUM    shift, and go to state 25
+    IDENT  shift, and go to state 26
+    EXP    shift, and go to state 27
+    SIN    shift, and go to state 28
+    COS    shift, and go to state 29
+    LOG    shift, and go to state 30
+    SQRT   shift, and go to state 31
+    '-'    shift, and go to state 32
+    '('    shift, and go to state 33
+    '['    shift, and go to state 34
+
+    expression  go to state 229
+
+
+State 208
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' ode '}' INIT '{' . init '}'
+
+    '{'  shift, and go to state 230
+
+    $default  reduce using rule 69 (interval_vector)
+
+    init                     go to state 231
+    interval_vector          go to state 232
+    set_of_interval_vectors  go to state 233
+
+
+State 209
+
+   93 lti_ode: lti_ode IDENT '\'' EQ . lti_polynomial
+
+    NUM    shift, and go to state 234
+    IDENT  shift, and go to state 235
+    '-'    shift, and go to state 236
+    '['    shift, and go to state 237
+
+    lti_polynomial  go to state 238
+    lti_term        go to state 239
+
+
+State 210
+
+   39 continuous: stateVarDecls SETTING '{' setting '}' LTIODE '{' lti_ode '}' INIT '{' . init '}'
+
+    '{'  shift, and go to state 230
+
+    $default  reduce using rule 69 (interval_vector)
+
+    init                     go to state 240
+    interval_vector          go to state 232
+    set_of_interval_vectors  go to state 233
+
+
+State 211
+
+  112 ltv_term: IDENT .
+
+    $default  reduce using rule 112 (ltv_term)
+
+
+State 212
+
+  109 ltv_polynomial: '-' . ltv_term
+
+    IDENT  shift, and go to state 211
+    '('    shift, and go to state 213
+
+    ltv_term  go to state 241
+
+
+State 213
+
+  111 ltv_term: '(' . univariate_polynomial ')' '*' IDENT
+  113         | '(' . univariate_polynomial ')'
+
+    NUM    shift, and go to state 242
+    IDENT  shift, and go to state 243
+    '-'    shift, and go to state 244
+    '('    shift, and go to state 245
+
+    univariate_polynomial  go to state 246
+
+
+State 214
+
+  106 ltv_ode: IDENT '\'' EQ ltv_polynomial .
+  107 ltv_polynomial: ltv_polynomial . '+' ltv_term
+  108               | ltv_polynomial . '-' ltv_term
+
+    '+'  shift, and go to state 247
+    '-'  shift, and go to state 248
+
+    $default  reduce using rule 106 (ltv_ode)
+
+
+State 215
+
+  110 ltv_polynomial: ltv_term .
+
+    $default  reduce using rule 110 (ltv_polynomial)
+
+
+State 216
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM . '}' '{' ltv_ode '}' INIT '{' init '}'
+
+    '}'  shift, and go to state 249
+
+
+State 217
+
+  105 ltv_ode: ltv_ode IDENT '\'' EQ . ltv_polynomial
+
+    IDENT  shift, and go to state 211
+    '-'    shift, and go to state 212
+    '('    shift, and go to state 213
+
+    ltv_polynomial  go to state 250
+    ltv_term        go to state 215
+
+
+State 218
+
+   40 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' ltv_ode '}' INIT '{' . init '}'
+
+    '{'  shift, and go to state 230
+
+    $default  reduce using rule 69 (interval_vector)
+
+    init                     go to state 251
+    interval_vector          go to state 232
+    set_of_interval_vectors  go to state 233
+
+
+State 219
+
+   77 tmIdDeclList: tmIdDeclList ',' . IDENT
+
+    IDENT  shift, and go to state 252
+
+
+State 220
+
+   80 continuous_flowpipes: '{' vector_of_Taylor_models . domain_setting '}'
+   81 vector_of_Taylor_models: vector_of_Taylor_models . IDENT EQ Taylor_model_polynomial '+' '[' NUM ',' NUM ']'
+
+    IDENT  shift, and go to state 253
+
+    domain_setting  go to state 254
+
+
+State 221
+
+   79 continuous_flowpipes: continuous_flowpipes '{' . vector_of_Taylor_models domain_setting '}'
+
+    $default  reduce using rule 82 (vector_of_Taylor_models)
+
+    vector_of_Taylor_models  go to state 255
+
+
+State 222
+
+    2 model: stateVarDecls plotting ORDER NUM CUTOFF NUM output_env unsafe_setting CONTINUOUSFLOW '{' tmVarDecls continuous_flowpipes '}' .
+
+    $default  reduce using rule 2 (model)
+
+
+State 223
+
+   51 remainders: IDENT ':' '[' . NUM ',' NUM ']'
+
+    NUM  shift, and go to state 256
+
+
+State 224
+
+   50 remainders: remainders ',' IDENT . ':' '[' NUM ',' NUM ']'
+
+    ':'  shift, and go to state 257
+
+
+State 225
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF . NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 258
+
+
+State 226
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN . NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 259
+
+
+State 227
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME . NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 260
+
+
+State 228
+
+   38 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' NUM '}' '{' ode '}' . INIT '{' init '}'
+
+    INIT  shift, and go to state 261
+
+
+State 229
+
+   22 expression: expression . '+' expression
+   23           | expression . '-' expression
+   25           | expression . '*' expression
+   26           | expression . '^' NUM
+   31           | expression . '/' expression
+   64 ode: ode IDENT '\'' EQ expression .
+
+    '+'  shift, and go to state 62
+    '-'  shift, and go to state 63
+    '*'  shift, and go to state 64
+    '/'  shift, and go to state 65
+    '^'  shift, and go to state 66
+
+    $default  reduce using rule 64 (ode)
+
+
+State 230
+
+   71 set_of_interval_vectors: '{' . interval_vector '}'
+
+    $default  reduce using rule 69 (interval_vector)
+
+    interval_vector  go to state 262
+
+
+State 231
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' ode '}' INIT '{' init . '}'
+
+    '}'  shift, and go to state 263
+
+
+State 232
+
+   67 init: interval_vector .
+   68 interval_vector: interval_vector . IDENT BELONGSTO '[' NUM ',' NUM ']'
+
+    IDENT  shift, and go to state 264
+
+    $default  reduce using rule 67 (init)
+
+
+State 233
+
+   66 init: set_of_interval_vectors .
+   70 set_of_interval_vectors: set_of_interval_vectors . '{' interval_vector '}'
+
+    '{'  shift, and go to state 265
+
+    $default  reduce using rule 66 (init)
+
+
+State 234
+
+   99 lti_term: NUM . '*' IDENT
+  102         | NUM .
+
+    '*'  shift, and go to state 266
+
+    $default  reduce using rule 102 (lti_term)
+
+
+State 235
+
+  100 lti_term: IDENT .
+
+    $default  reduce using rule 100 (lti_term)
+
+
+State 236
+
+   97 lti_polynomial: '-' . lti_term
+
+    NUM    shift, and go to state 234
+    IDENT  shift, and go to state 235
+    '['    shift, and go to state 237
+
+    lti_term  go to state 267
+
+
+State 237
+
+  101 lti_term: '[' . NUM ',' NUM ']'
+
+    NUM  shift, and go to state 268
+
+
+State 238
+
+   93 lti_ode: lti_ode IDENT '\'' EQ lti_polynomial .
+   95 lti_polynomial: lti_polynomial . '+' lti_term
+   96               | lti_polynomial . '-' lti_term
+
+    '+'  shift, and go to state 269
+    '-'  shift, and go to state 270
+
+    $default  reduce using rule 93 (lti_ode)
+
+
+State 239
+
+   98 lti_polynomial: lti_term .
+
+    $default  reduce using rule 98 (lti_polynomial)
+
+
+State 240
+
+   39 continuous: stateVarDecls SETTING '{' setting '}' LTIODE '{' lti_ode '}' INIT '{' init . '}'
+
+    '}'  shift, and go to state 271
+
+
+State 241
+
+  109 ltv_polynomial: '-' ltv_term .
+
+    $default  reduce using rule 109 (ltv_polynomial)
+
+
+State 242
+
+   21 univariate_polynomial: NUM .
+
+    $default  reduce using rule 21 (univariate_polynomial)
+
+
+State 243
+
+   20 univariate_polynomial: IDENT .
+
+    $default  reduce using rule 20 (univariate_polynomial)
+
+
+State 244
+
+   19 univariate_polynomial: '-' . univariate_polynomial
+
+    NUM    shift, and go to state 242
+    IDENT  shift, and go to state 243
+    '-'    shift, and go to state 244
+    '('    shift, and go to state 245
+
+    univariate_polynomial  go to state 272
+
+
+State 245
+
+   16 univariate_polynomial: '(' . univariate_polynomial ')'
+
+    NUM    shift, and go to state 242
+    IDENT  shift, and go to state 243
+    '-'    shift, and go to state 244
+    '('    shift, and go to state 245
+
+    univariate_polynomial  go to state 273
+
+
+State 246
+
+   14 univariate_polynomial: univariate_polynomial . '+' univariate_polynomial
+   15                      | univariate_polynomial . '-' univariate_polynomial
+   17                      | univariate_polynomial . '*' univariate_polynomial
+   18                      | univariate_polynomial . '^' NUM
+  111 ltv_term: '(' univariate_polynomial . ')' '*' IDENT
+  113         | '(' univariate_polynomial . ')'
+
+    '+'  shift, and go to state 274
+    '-'  shift, and go to state 275
+    '*'  shift, and go to state 276
+    '^'  shift, and go to state 277
+    ')'  shift, and go to state 278
+
+
+State 247
+
+  107 ltv_polynomial: ltv_polynomial '+' . ltv_term
+
+    IDENT  shift, and go to state 211
+    '('    shift, and go to state 213
+
+    ltv_term  go to state 279
+
+
+State 248
+
+  108 ltv_polynomial: ltv_polynomial '-' . ltv_term
+
+    IDENT  shift, and go to state 211
+    '('    shift, and go to state 213
+
+    ltv_term  go to state 280
+
+
+State 249
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' . '{' ltv_ode '}' INIT '{' init '}'
+
+    '{'  shift, and go to state 281
+
+
+State 250
+
+  105 ltv_ode: ltv_ode IDENT '\'' EQ ltv_polynomial .
+  107 ltv_polynomial: ltv_polynomial . '+' ltv_term
+  108               | ltv_polynomial . '-' ltv_term
+
+    '+'  shift, and go to state 247
+    '-'  shift, and go to state 248
+
+    $default  reduce using rule 105 (ltv_ode)
+
+
+State 251
+
+   40 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' ltv_ode '}' INIT '{' init . '}'
+
+    '}'  shift, and go to state 282
+
+
+State 252
+
+   77 tmIdDeclList: tmIdDeclList ',' IDENT .
+
+    $default  reduce using rule 77 (tmIdDeclList)
+
+
+State 253
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT . EQ Taylor_model_polynomial '+' '[' NUM ',' NUM ']'
+   84 domain_setting: IDENT . BELONGSTO '[' NUM ',' NUM ']'
+
+    EQ         shift, and go to state 283
+    BELONGSTO  shift, and go to state 284
+
+
+State 254
+
+   80 continuous_flowpipes: '{' vector_of_Taylor_models domain_setting . '}'
+   83 domain_setting: domain_setting . IDENT BELONGSTO '[' NUM ',' NUM ']'
+
+    IDENT  shift, and go to state 285
+    '}'    shift, and go to state 286
+
+
+State 255
+
+   79 continuous_flowpipes: continuous_flowpipes '{' vector_of_Taylor_models . domain_setting '}'
+   81 vector_of_Taylor_models: vector_of_Taylor_models . IDENT EQ Taylor_model_polynomial '+' '[' NUM ',' NUM ']'
+
+    IDENT  shift, and go to state 253
+
+    domain_setting  go to state 287
+
+
+State 256
+
+   51 remainders: IDENT ':' '[' NUM . ',' NUM ']'
+
+    ','  shift, and go to state 288
+
+
+State 257
+
+   50 remainders: remainders ',' IDENT ':' . '[' NUM ',' NUM ']'
+
+    '['  shift, and go to state 289
+
+
+State 258
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM . PRECISION NUM output_env printing
+
+    PRECISION  shift, and go to state 290
+
+
+State 259
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM . ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    ','  shift, and go to state 291
+
+
+State 260
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM . remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    REMEST  shift, and go to state 155
+
+    remainder_estimation  go to state 292
+
+
+State 261
+
+   38 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' NUM '}' '{' ode '}' INIT . '{' init '}'
+
+    '{'  shift, and go to state 293
+
+
+State 262
+
+   68 interval_vector: interval_vector . IDENT BELONGSTO '[' NUM ',' NUM ']'
+   71 set_of_interval_vectors: '{' interval_vector . '}'
+
+    IDENT  shift, and go to state 264
+    '}'    shift, and go to state 294
+
+
+State 263
+
+   37 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' ode '}' INIT '{' init '}' .
+
+    $default  reduce using rule 37 (continuous)
+
+
+State 264
+
+   68 interval_vector: interval_vector IDENT . BELONGSTO '[' NUM ',' NUM ']'
+
+    BELONGSTO  shift, and go to state 295
+
+
+State 265
+
+   70 set_of_interval_vectors: set_of_interval_vectors '{' . interval_vector '}'
+
+    $default  reduce using rule 69 (interval_vector)
+
+    interval_vector  go to state 296
+
+
+State 266
+
+   99 lti_term: NUM '*' . IDENT
+
+    IDENT  shift, and go to state 297
+
+
+State 267
+
+   97 lti_polynomial: '-' lti_term .
+
+    $default  reduce using rule 97 (lti_polynomial)
+
+
+State 268
+
+  101 lti_term: '[' NUM . ',' NUM ']'
+
+    ','  shift, and go to state 298
+
+
+State 269
+
+   95 lti_polynomial: lti_polynomial '+' . lti_term
+
+    NUM    shift, and go to state 234
+    IDENT  shift, and go to state 235
+    '['    shift, and go to state 237
+
+    lti_term  go to state 299
+
+
+State 270
+
+   96 lti_polynomial: lti_polynomial '-' . lti_term
+
+    NUM    shift, and go to state 234
+    IDENT  shift, and go to state 235
+    '['    shift, and go to state 237
+
+    lti_term  go to state 300
+
+
+State 271
+
+   39 continuous: stateVarDecls SETTING '{' setting '}' LTIODE '{' lti_ode '}' INIT '{' init '}' .
+
+    $default  reduce using rule 39 (continuous)
+
+
+State 272
+
+   14 univariate_polynomial: univariate_polynomial . '+' univariate_polynomial
+   15                      | univariate_polynomial . '-' univariate_polynomial
+   17                      | univariate_polynomial . '*' univariate_polynomial
+   18                      | univariate_polynomial . '^' NUM
+   19                      | '-' univariate_polynomial .
+
+    '^'  shift, and go to state 277
+
+    $default  reduce using rule 19 (univariate_polynomial)
+
+
+State 273
+
+   14 univariate_polynomial: univariate_polynomial . '+' univariate_polynomial
+   15                      | univariate_polynomial . '-' univariate_polynomial
+   16                      | '(' univariate_polynomial . ')'
+   17                      | univariate_polynomial . '*' univariate_polynomial
+   18                      | univariate_polynomial . '^' NUM
+
+    '+'  shift, and go to state 274
+    '-'  shift, and go to state 275
+    '*'  shift, and go to state 276
+    '^'  shift, and go to state 277
+    ')'  shift, and go to state 301
+
+
+State 274
+
+   14 univariate_polynomial: univariate_polynomial '+' . univariate_polynomial
+
+    NUM    shift, and go to state 242
+    IDENT  shift, and go to state 243
+    '-'    shift, and go to state 244
+    '('    shift, and go to state 245
+
+    univariate_polynomial  go to state 302
+
+
+State 275
+
+   15 univariate_polynomial: univariate_polynomial '-' . univariate_polynomial
+
+    NUM    shift, and go to state 242
+    IDENT  shift, and go to state 243
+    '-'    shift, and go to state 244
+    '('    shift, and go to state 245
+
+    univariate_polynomial  go to state 303
+
+
+State 276
+
+   17 univariate_polynomial: univariate_polynomial '*' . univariate_polynomial
+
+    NUM    shift, and go to state 242
+    IDENT  shift, and go to state 243
+    '-'    shift, and go to state 244
+    '('    shift, and go to state 245
+
+    univariate_polynomial  go to state 304
+
+
+State 277
+
+   18 univariate_polynomial: univariate_polynomial '^' . NUM
+
+    NUM  shift, and go to state 305
+
+
+State 278
+
+  111 ltv_term: '(' univariate_polynomial ')' . '*' IDENT
+  113         | '(' univariate_polynomial ')' .
+
+    '*'  shift, and go to state 306
+
+    $default  reduce using rule 113 (ltv_term)
+
+
+State 279
+
+  107 ltv_polynomial: ltv_polynomial '+' ltv_term .
+
+    $default  reduce using rule 107 (ltv_polynomial)
+
+
+State 280
+
+  108 ltv_polynomial: ltv_polynomial '-' ltv_term .
+
+    $default  reduce using rule 108 (ltv_polynomial)
+
+
+State 281
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' . ltv_ode '}' INIT '{' init '}'
+
+    IDENT  shift, and go to state 307
+
+    ltv_ode  go to state 308
+
+
+State 282
+
+   40 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' ltv_ode '}' INIT '{' init '}' .
+
+    $default  reduce using rule 40 (continuous)
+
+
+State 283
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT EQ . Taylor_model_polynomial '+' '[' NUM ',' NUM ']'
+
+    NUM    shift, and go to state 309
+    IDENT  shift, and go to state 310
+    '-'    shift, and go to state 311
+    '('    shift, and go to state 312
+
+    Taylor_model_polynomial  go to state 313
+
+
+State 284
+
+   84 domain_setting: IDENT BELONGSTO . '[' NUM ',' NUM ']'
+
+    '['  shift, and go to state 314
+
+
+State 285
+
+   83 domain_setting: domain_setting IDENT . BELONGSTO '[' NUM ',' NUM ']'
+
+    BELONGSTO  shift, and go to state 315
+
+
+State 286
+
+   80 continuous_flowpipes: '{' vector_of_Taylor_models domain_setting '}' .
+
+    $default  reduce using rule 80 (continuous_flowpipes)
+
+
+State 287
+
+   79 continuous_flowpipes: continuous_flowpipes '{' vector_of_Taylor_models domain_setting . '}'
+   83 domain_setting: domain_setting . IDENT BELONGSTO '[' NUM ',' NUM ']'
+
+    IDENT  shift, and go to state 285
+    '}'    shift, and go to state 316
+
+
+State 288
+
+   51 remainders: IDENT ':' '[' NUM ',' . NUM ']'
+
+    NUM  shift, and go to state 317
+
+
+State 289
+
+   50 remainders: remainders ',' IDENT ':' '[' . NUM ',' NUM ']'
+
+    NUM  shift, and go to state 318
+
+
+State 290
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION . NUM output_env printing
+
+    NUM  shift, and go to state 319
+
+
+State 291
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' . MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    MAX  shift, and go to state 320
+
+
+State 292
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation . plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    GNUPLOT  shift, and go to state 13
+    MATLAB   shift, and go to state 14
+
+    plotting  go to state 321
+
+
+State 293
+
+   38 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' NUM '}' '{' ode '}' INIT '{' . init '}'
+
+    '{'  shift, and go to state 230
+
+    $default  reduce using rule 69 (interval_vector)
+
+    init                     go to state 322
+    interval_vector          go to state 232
+    set_of_interval_vectors  go to state 233
+
+
+State 294
+
+   71 set_of_interval_vectors: '{' interval_vector '}' .
+
+    $default  reduce using rule 71 (set_of_interval_vectors)
+
+
+State 295
+
+   68 interval_vector: interval_vector IDENT BELONGSTO . '[' NUM ',' NUM ']'
+
+    '['  shift, and go to state 323
+
+
+State 296
+
+   68 interval_vector: interval_vector . IDENT BELONGSTO '[' NUM ',' NUM ']'
+   70 set_of_interval_vectors: set_of_interval_vectors '{' interval_vector . '}'
+
+    IDENT  shift, and go to state 264
+    '}'    shift, and go to state 324
+
+
+State 297
+
+   99 lti_term: NUM '*' IDENT .
+
+    $default  reduce using rule 99 (lti_term)
+
+
+State 298
+
+  101 lti_term: '[' NUM ',' . NUM ']'
+
+    NUM  shift, and go to state 325
+
+
+State 299
+
+   95 lti_polynomial: lti_polynomial '+' lti_term .
+
+    $default  reduce using rule 95 (lti_polynomial)
+
+
+State 300
+
+   96 lti_polynomial: lti_polynomial '-' lti_term .
+
+    $default  reduce using rule 96 (lti_polynomial)
+
+
+State 301
+
+   16 univariate_polynomial: '(' univariate_polynomial ')' .
+
+    $default  reduce using rule 16 (univariate_polynomial)
+
+
+State 302
+
+   14 univariate_polynomial: univariate_polynomial . '+' univariate_polynomial
+   14                      | univariate_polynomial '+' univariate_polynomial .
+   15                      | univariate_polynomial . '-' univariate_polynomial
+   17                      | univariate_polynomial . '*' univariate_polynomial
+   18                      | univariate_polynomial . '^' NUM
+
+    '*'  shift, and go to state 276
+    '^'  shift, and go to state 277
+
+    $default  reduce using rule 14 (univariate_polynomial)
+
+
+State 303
+
+   14 univariate_polynomial: univariate_polynomial . '+' univariate_polynomial
+   15                      | univariate_polynomial . '-' univariate_polynomial
+   15                      | univariate_polynomial '-' univariate_polynomial .
+   17                      | univariate_polynomial . '*' univariate_polynomial
+   18                      | univariate_polynomial . '^' NUM
+
+    '*'  shift, and go to state 276
+    '^'  shift, and go to state 277
+
+    $default  reduce using rule 15 (univariate_polynomial)
+
+
+State 304
+
+   14 univariate_polynomial: univariate_polynomial . '+' univariate_polynomial
+   15                      | univariate_polynomial . '-' univariate_polynomial
+   17                      | univariate_polynomial . '*' univariate_polynomial
+   17                      | univariate_polynomial '*' univariate_polynomial .
+   18                      | univariate_polynomial . '^' NUM
+
+    '^'  shift, and go to state 277
+
+    $default  reduce using rule 17 (univariate_polynomial)
+
+
+State 305
+
+   18 univariate_polynomial: univariate_polynomial '^' NUM .
+
+    $default  reduce using rule 18 (univariate_polynomial)
+
+
+State 306
+
+  111 ltv_term: '(' univariate_polynomial ')' '*' . IDENT
+
+    IDENT  shift, and go to state 326
+
+
+State 307
+
+  106 ltv_ode: IDENT . '\'' EQ ltv_polynomial
+
+    '\''  shift, and go to state 174
+
+
+State 308
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode . '}' INIT '{' init '}'
+  105 ltv_ode: ltv_ode . IDENT '\'' EQ ltv_polynomial
+
+    IDENT  shift, and go to state 177
+    '}'    shift, and go to state 327
+
+
+State 309
+
+   92 Taylor_model_polynomial: NUM .
+
+    $default  reduce using rule 92 (Taylor_model_polynomial)
+
+
+State 310
+
+   91 Taylor_model_polynomial: IDENT .
+
+    $default  reduce using rule 91 (Taylor_model_polynomial)
+
+
+State 311
+
+   90 Taylor_model_polynomial: '-' . Taylor_model_polynomial
+
+    NUM    shift, and go to state 309
+    IDENT  shift, and go to state 310
+    '-'    shift, and go to state 311
+    '('    shift, and go to state 312
+
+    Taylor_model_polynomial  go to state 328
+
+
+State 312
+
+   87 Taylor_model_polynomial: '(' . Taylor_model_polynomial ')'
+
+    NUM    shift, and go to state 309
+    IDENT  shift, and go to state 310
+    '-'    shift, and go to state 311
+    '('    shift, and go to state 312
+
+    Taylor_model_polynomial  go to state 329
+
+
+State 313
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT EQ Taylor_model_polynomial . '+' '[' NUM ',' NUM ']'
+   85 Taylor_model_polynomial: Taylor_model_polynomial . '+' Taylor_model_polynomial
+   86                        | Taylor_model_polynomial . '-' Taylor_model_polynomial
+   88                        | Taylor_model_polynomial . '*' Taylor_model_polynomial
+   89                        | Taylor_model_polynomial . '^' NUM
+
+    '+'  shift, and go to state 330
+    '-'  shift, and go to state 331
+    '*'  shift, and go to state 332
+    '^'  shift, and go to state 333
+
+
+State 314
+
+   84 domain_setting: IDENT BELONGSTO '[' . NUM ',' NUM ']'
+
+    NUM  shift, and go to state 334
+
+
+State 315
+
+   83 domain_setting: domain_setting IDENT BELONGSTO . '[' NUM ',' NUM ']'
+
+    '['  shift, and go to state 335
+
+
+State 316
+
+   79 continuous_flowpipes: continuous_flowpipes '{' vector_of_Taylor_models domain_setting '}' .
+
+    $default  reduce using rule 79 (continuous_flowpipes)
+
+
+State 317
+
+   51 remainders: IDENT ':' '[' NUM ',' NUM . ']'
+
+    ']'  shift, and go to state 336
+
+
+State 318
+
+   50 remainders: remainders ',' IDENT ':' '[' NUM . ',' NUM ']'
+
+    ','  shift, and go to state 337
+
+
+State 319
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM . output_env printing
+
+    TM        shift, and go to state 129
+    OUTPUT    shift, and go to state 130
+    NOOUTPUT  shift, and go to state 131
+    PLOT      shift, and go to state 132
+
+    output_env  go to state 338
+
+
+State 320
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX . NUM '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 339
+
+
+State 321
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting . FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    FIXEDORD  shift, and go to state 340
+
+
+State 322
+
+   38 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' NUM '}' '{' ode '}' INIT '{' init . '}'
+
+    '}'  shift, and go to state 341
+
+
+State 323
+
+   68 interval_vector: interval_vector IDENT BELONGSTO '[' . NUM ',' NUM ']'
+
+    NUM  shift, and go to state 342
+
+
+State 324
+
+   70 set_of_interval_vectors: set_of_interval_vectors '{' interval_vector '}' .
+
+    $default  reduce using rule 70 (set_of_interval_vectors)
+
+
+State 325
+
+  101 lti_term: '[' NUM ',' NUM . ']'
+
+    ']'  shift, and go to state 343
+
+
+State 326
+
+  111 ltv_term: '(' univariate_polynomial ')' '*' IDENT .
+
+    $default  reduce using rule 111 (ltv_term)
+
+
+State 327
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' . INIT '{' init '}'
+
+    INIT  shift, and go to state 344
+
+
+State 328
+
+   85 Taylor_model_polynomial: Taylor_model_polynomial . '+' Taylor_model_polynomial
+   86                        | Taylor_model_polynomial . '-' Taylor_model_polynomial
+   88                        | Taylor_model_polynomial . '*' Taylor_model_polynomial
+   89                        | Taylor_model_polynomial . '^' NUM
+   90                        | '-' Taylor_model_polynomial .
+
+    '^'  shift, and go to state 333
+
+    $default  reduce using rule 90 (Taylor_model_polynomial)
+
+
+State 329
+
+   85 Taylor_model_polynomial: Taylor_model_polynomial . '+' Taylor_model_polynomial
+   86                        | Taylor_model_polynomial . '-' Taylor_model_polynomial
+   87                        | '(' Taylor_model_polynomial . ')'
+   88                        | Taylor_model_polynomial . '*' Taylor_model_polynomial
+   89                        | Taylor_model_polynomial . '^' NUM
+
+    '+'  shift, and go to state 345
+    '-'  shift, and go to state 331
+    '*'  shift, and go to state 332
+    '^'  shift, and go to state 333
+    ')'  shift, and go to state 346
+
+
+State 330
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT EQ Taylor_model_polynomial '+' . '[' NUM ',' NUM ']'
+   85 Taylor_model_polynomial: Taylor_model_polynomial '+' . Taylor_model_polynomial
+
+    NUM    shift, and go to state 309
+    IDENT  shift, and go to state 310
+    '-'    shift, and go to state 311
+    '('    shift, and go to state 312
+    '['    shift, and go to state 347
+
+    Taylor_model_polynomial  go to state 348
+
+
+State 331
+
+   86 Taylor_model_polynomial: Taylor_model_polynomial '-' . Taylor_model_polynomial
+
+    NUM    shift, and go to state 309
+    IDENT  shift, and go to state 310
+    '-'    shift, and go to state 311
+    '('    shift, and go to state 312
+
+    Taylor_model_polynomial  go to state 349
+
+
+State 332
+
+   88 Taylor_model_polynomial: Taylor_model_polynomial '*' . Taylor_model_polynomial
+
+    NUM    shift, and go to state 309
+    IDENT  shift, and go to state 310
+    '-'    shift, and go to state 311
+    '('    shift, and go to state 312
+
+    Taylor_model_polynomial  go to state 350
+
+
+State 333
+
+   89 Taylor_model_polynomial: Taylor_model_polynomial '^' . NUM
+
+    NUM  shift, and go to state 351
+
+
+State 334
+
+   84 domain_setting: IDENT BELONGSTO '[' NUM . ',' NUM ']'
+
+    ','  shift, and go to state 352
+
+
+State 335
+
+   83 domain_setting: domain_setting IDENT BELONGSTO '[' . NUM ',' NUM ']'
+
+    NUM  shift, and go to state 353
+
+
+State 336
+
+   51 remainders: IDENT ':' '[' NUM ',' NUM ']' .
+
+    $default  reduce using rule 51 (remainders)
+
+
+State 337
+
+   50 remainders: remainders ',' IDENT ':' '[' NUM ',' . NUM ']'
+
+    NUM  shift, and go to state 354
+
+
+State 338
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env . printing
+
+    PRINTON   shift, and go to state 355
+    PRINTOFF  shift, and go to state 356
+
+    printing  go to state 357
+
+
+State 339
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM . '}' CUTOFF NUM PRECISION NUM output_env printing
+
+    '}'  shift, and go to state 358
+
+
+State 340
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD . NUM CUTOFF NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 359
+
+
+State 341
+
+   38 continuous: stateVarDecls SETTING '{' setting '}' ODE '{' NUM '}' '{' ode '}' INIT '{' init '}' .
+
+    $default  reduce using rule 38 (continuous)
+
+
+State 342
+
+   68 interval_vector: interval_vector IDENT BELONGSTO '[' NUM . ',' NUM ']'
+
+    ','  shift, and go to state 360
+
+
+State 343
+
+  101 lti_term: '[' NUM ',' NUM ']' .
+
+    $default  reduce using rule 101 (lti_term)
+
+
+State 344
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT . '{' init '}'
+
+    '{'  shift, and go to state 361
+
+
+State 345
+
+   85 Taylor_model_polynomial: Taylor_model_polynomial '+' . Taylor_model_polynomial
+
+    NUM    shift, and go to state 309
+    IDENT  shift, and go to state 310
+    '-'    shift, and go to state 311
+    '('    shift, and go to state 312
+
+    Taylor_model_polynomial  go to state 348
+
+
+State 346
+
+   87 Taylor_model_polynomial: '(' Taylor_model_polynomial ')' .
+
+    $default  reduce using rule 87 (Taylor_model_polynomial)
+
+
+State 347
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT EQ Taylor_model_polynomial '+' '[' . NUM ',' NUM ']'
+
+    NUM  shift, and go to state 362
+
+
+State 348
+
+   85 Taylor_model_polynomial: Taylor_model_polynomial . '+' Taylor_model_polynomial
+   85                        | Taylor_model_polynomial '+' Taylor_model_polynomial .
+   86                        | Taylor_model_polynomial . '-' Taylor_model_polynomial
+   88                        | Taylor_model_polynomial . '*' Taylor_model_polynomial
+   89                        | Taylor_model_polynomial . '^' NUM
+
+    '*'  shift, and go to state 332
+    '^'  shift, and go to state 333
+
+    $default  reduce using rule 85 (Taylor_model_polynomial)
+
+
+State 349
+
+   85 Taylor_model_polynomial: Taylor_model_polynomial . '+' Taylor_model_polynomial
+   86                        | Taylor_model_polynomial . '-' Taylor_model_polynomial
+   86                        | Taylor_model_polynomial '-' Taylor_model_polynomial .
+   88                        | Taylor_model_polynomial . '*' Taylor_model_polynomial
+   89                        | Taylor_model_polynomial . '^' NUM
+
+    '*'  shift, and go to state 332
+    '^'  shift, and go to state 333
+
+    $default  reduce using rule 86 (Taylor_model_polynomial)
+
+
+State 350
+
+   85 Taylor_model_polynomial: Taylor_model_polynomial . '+' Taylor_model_polynomial
+   86                        | Taylor_model_polynomial . '-' Taylor_model_polynomial
+   88                        | Taylor_model_polynomial . '*' Taylor_model_polynomial
+   88                        | Taylor_model_polynomial '*' Taylor_model_polynomial .
+   89                        | Taylor_model_polynomial . '^' NUM
+
+    '^'  shift, and go to state 333
+
+    $default  reduce using rule 88 (Taylor_model_polynomial)
+
+
+State 351
+
+   89 Taylor_model_polynomial: Taylor_model_polynomial '^' NUM .
+
+    $default  reduce using rule 89 (Taylor_model_polynomial)
+
+
+State 352
+
+   84 domain_setting: IDENT BELONGSTO '[' NUM ',' . NUM ']'
+
+    NUM  shift, and go to state 363
+
+
+State 353
+
+   83 domain_setting: domain_setting IDENT BELONGSTO '[' NUM . ',' NUM ']'
+
+    ','  shift, and go to state 364
+
+
+State 354
+
+   50 remainders: remainders ',' IDENT ':' '[' NUM ',' NUM . ']'
+
+    ']'  shift, and go to state 365
+
+
+State 355
+
+   62 printing: PRINTON .
+
+    $default  reduce using rule 62 (printing)
+
+
+State 356
+
+   63 printing: PRINTOFF .
+
+    $default  reduce using rule 63 (printing)
+
+
+State 357
+
+   45 setting: FIXEDST NUM TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing .
+
+    $default  reduce using rule 45 (setting)
+
+
+State 358
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' . CUTOFF NUM PRECISION NUM output_env printing
+
+    CUTOFF  shift, and go to state 366
+
+
+State 359
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM . CUTOFF NUM PRECISION NUM output_env printing
+
+    CUTOFF  shift, and go to state 367
+
+
+State 360
+
+   68 interval_vector: interval_vector IDENT BELONGSTO '[' NUM ',' . NUM ']'
+
+    NUM  shift, and go to state 368
+
+
+State 361
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' . init '}'
+
+    '{'  shift, and go to state 230
+
+    $default  reduce using rule 69 (interval_vector)
+
+    init                     go to state 369
+    interval_vector          go to state 232
+    set_of_interval_vectors  go to state 233
+
+
+State 362
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT EQ Taylor_model_polynomial '+' '[' NUM . ',' NUM ']'
+
+    ','  shift, and go to state 370
+
+
+State 363
+
+   84 domain_setting: IDENT BELONGSTO '[' NUM ',' NUM . ']'
+
+    ']'  shift, and go to state 371
+
+
+State 364
+
+   83 domain_setting: domain_setting IDENT BELONGSTO '[' NUM ',' . NUM ']'
+
+    NUM  shift, and go to state 372
+
+
+State 365
+
+   50 remainders: remainders ',' IDENT ':' '[' NUM ',' NUM ']' .
+
+    $default  reduce using rule 50 (remainders)
+
+
+State 366
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF . NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 373
+
+
+State 367
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF . NUM PRECISION NUM output_env printing
+
+    NUM  shift, and go to state 374
+
+
+State 368
+
+   68 interval_vector: interval_vector IDENT BELONGSTO '[' NUM ',' NUM . ']'
+
+    ']'  shift, and go to state 375
+
+
+State 369
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init . '}'
+
+    '}'  shift, and go to state 376
+
+
+State 370
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT EQ Taylor_model_polynomial '+' '[' NUM ',' . NUM ']'
+
+    NUM  shift, and go to state 377
+
+
+State 371
+
+   84 domain_setting: IDENT BELONGSTO '[' NUM ',' NUM ']' .
+
+    $default  reduce using rule 84 (domain_setting)
+
+
+State 372
+
+   83 domain_setting: domain_setting IDENT BELONGSTO '[' NUM ',' NUM . ']'
+
+    ']'  shift, and go to state 378
+
+
+State 373
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM . PRECISION NUM output_env printing
+
+    PRECISION  shift, and go to state 379
+
+
+State 374
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM . PRECISION NUM output_env printing
+
+    PRECISION  shift, and go to state 380
+
+
+State 375
+
+   68 interval_vector: interval_vector IDENT BELONGSTO '[' NUM ',' NUM ']' .
+
+    $default  reduce using rule 68 (interval_vector)
+
+
+State 376
+
+   41 continuous: stateVarDecls SETTING '{' setting '}' LTVODE '{' tv_par_list '}' '{' NUM '}' '{' ltv_ode '}' INIT '{' init '}' .
+
+    $default  reduce using rule 41 (continuous)
+
+
+State 377
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT EQ Taylor_model_polynomial '+' '[' NUM ',' NUM . ']'
+
+    ']'  shift, and go to state 381
+
+
+State 378
+
+   83 domain_setting: domain_setting IDENT BELONGSTO '[' NUM ',' NUM ']' .
+
+    $default  reduce using rule 83 (domain_setting)
+
+
+State 379
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION . NUM output_env printing
+
+    NUM  shift, and go to state 382
+
+
+State 380
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION . NUM output_env printing
+
+    NUM  shift, and go to state 383
+
+
+State 381
+
+   81 vector_of_Taylor_models: vector_of_Taylor_models IDENT EQ Taylor_model_polynomial '+' '[' NUM ',' NUM ']' .
+
+    $default  reduce using rule 81 (vector_of_Taylor_models)
+
+
+State 382
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM . output_env printing
+
+    TM        shift, and go to state 129
+    OUTPUT    shift, and go to state 130
+    NOOUTPUT  shift, and go to state 131
+    PLOT      shift, and go to state 132
+
+    output_env  go to state 384
+
+
+State 383
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM . output_env printing
+
+    TM        shift, and go to state 129
+    OUTPUT    shift, and go to state 130
+    NOOUTPUT  shift, and go to state 131
+    PLOT      shift, and go to state 132
+
+    output_env  go to state 385
+
+
+State 384
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env . printing
+
+    PRINTON   shift, and go to state 355
+    PRINTOFF  shift, and go to state 356
+
+    printing  go to state 386
+
+
+State 385
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env . printing
+
+    PRINTON   shift, and go to state 355
+    PRINTOFF  shift, and go to state 356
+
+    printing  go to state 387
+
+
+State 386
+
+   46 setting: FIXEDST NUM TIME NUM remainder_estimation plotting ADAPTIVEORD '{' MIN NUM ',' MAX NUM '}' CUTOFF NUM PRECISION NUM output_env printing .
+
+    $default  reduce using rule 46 (setting)
+
+
+State 387
+
+   47 setting: ADAPTIVEST '{' MIN NUM ',' MAX NUM '}' TIME NUM remainder_estimation plotting FIXEDORD NUM CUTOFF NUM PRECISION NUM output_env printing .
+
+    $default  reduce using rule 47 (setting)
