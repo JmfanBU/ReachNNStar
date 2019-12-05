@@ -25,7 +25,8 @@ source ~/venv/bin/activate
 
 pip install pip --upgrade
 
-pip install tensorflow # or tensorflow-gpu
+pip install tensorflow # or tensorflow-gpu, tensoflow 2.0 is not
+compatible with our code
 
 pip install sympy mpi4py scipy h5py
 
@@ -190,3 +191,12 @@ gnuplot FILENAME.plt
 ```
 
 Check the figures in outputs/images
+
+## Contributors
+Jiameng Fan, Chao Huang, Wenchao Li, Xin Chen, Qi Zhu
+
+## References
+C.Huang,J.Fan,W.Li,X.Chen,andQ.Zhu.Reachnn:Reachabilityanalysisofneural-network
+controlled systems. ACM Transactions on Embedded Computing Systems,
+18:1–22, 10 2019. doi:
+10.1145/3358228.[pdf](https://dl.acm.org/citation.cfm?id=3358228)
