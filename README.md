@@ -15,7 +15,7 @@ libmpfr4-dbg gsl-bin libgs10-dev bison flex gnuplot-x11 libglpk-dev
 ```
 - Install python libraries
 ```
-sudo apt-get install pip3-python
+sudo apt-get install python3-pip
 
 sudo pip3 install -U virtualenv
 
