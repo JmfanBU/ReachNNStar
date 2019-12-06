@@ -1,4 +1,4 @@
-# ReachNN*
+# ReachNN
 A tool for reachability analysis of neural-network controlled systems
 (NNCSs).
 
@@ -72,11 +72,11 @@ pip install h5py/h5py-2.10.0-cp36-cp36m-manylinux1_x86_64.whl
 
 ```
 
-### Compile Flow*
+### Compile Flow* and ReachNN
 
 ```
 
-./compile.sh # under ReachNNTool directories
+./compile.sh # under the root directory
 
 ```
 
@@ -127,18 +127,18 @@ The cpp file should be saved in ReachNNTool/ReachNN/Bernstein_Polynomial_Approxi
 
 ```
 
-./example.sh FILENAME ERROR_BOUND # FILENAME is the example's cpp filename; ERROR_BOUND depends on the system's sensiticity
+./example.sh FILENAME ERROR_BOUND # FILENAME is the example's cpp filename; ERROR_BOUND depends on the system's sensitivity
 
 ```
 
-#### Knowledge Distillation
+#### Verification-Aware Knowledge Distillation
 
 ##### This will replicate the running example
 ```
 
 cd VF_Retraining
 
-./run_knowledge_distillation
+./run_distillation
 
 ```
 Please check the result in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/outputs/nn_13_relu_tanh_*
