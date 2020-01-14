@@ -12,7 +12,7 @@ install dependencies.
 #### Up-to-date Installation
 - Install Flow* libraries
 ```
-sudo apt-get install libmp3-dev libmpfr-dev libmpfr-doc libmpfr4
+sudo apt-get install libgmp3-dev libmpfr-dev libmpfr-doc libmpfr4
 libmpfr4-dbg gsl-bin libgs10-dev bison flex gnuplot-x11 libglpk-dev
 ```
 - Install python libraries
