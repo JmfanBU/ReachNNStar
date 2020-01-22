@@ -31,10 +31,14 @@ int main()
 
 	Deterministic_Continuous_Dynamics dynamics(ode_rhs);
 
+
+
+
 	// Specify the parameters for reachability computation.
+
 	Computational_Setting setting;
 
-	unsigned int order = 6;
+	unsigned int order = 8;
 
 	// stepsize and order for reachability analysis
 	setting.setFixedStepsize(0.005, order);
@@ -56,7 +60,7 @@ int main()
 	vector<Interval> remainder_estimation(numVars, I);
 	setting.setRemainderEstimation(remainder_estimation);
 
-    setting.printOff();
+	setting.printOff();
 
 	setting.prepare();
 
@@ -64,7 +68,7 @@ int main()
 	 * Initial set can be a box which is represented by a vector of intervals.
 	 * The i-th component denotes the initial set of the i-th state variable.
 	 */
-	Interval init_x0(0.8,0.9), init_x1(0.5,0.6), init_u(0);
+	Interval init_x0(0.8, 0.9), init_x1(0.5, 0.6), init_u(0);
 	std::vector<Interval> X0;
 	X0.push_back(init_x0);
 	X0.push_back(init_x1);
@@ -87,10 +91,10 @@ int main()
 	char const *function_name1 = "poly_approx_controller";
 	char const *function_name2 = "poly_approx_error";
 	char const *function_name3 = "network_lips";
-	char const *degree_bound = "[1, 1]";
-	char const *activation = "ReLU";
+	char const *degree_bound = "[3, 3]";
+	char const *activation = "ReLU_tanh";
 	char const *output_index = "0";
-	char const *neural_network = "nn_13_relu";
+	char const *neural_network = "nn_1_relu_tanh";
 
 	double err_max = 0;
 	time_t start_timer;
@@ -122,6 +126,7 @@ int main()
 
 		tm_u.remainder.bloat(err);
 
+
 		initial_set.tmvPre.tms[u_id] = tm_u;
 
 		dynamics.reach(result, setting, initial_set, unsafeSet);
@@ -149,8 +154,8 @@ int main()
         reach_result = "Verification result: No(35)";
     }
 
-	time(&end_timer);
 
+	time(&end_timer);
 	seconds = difftime(start_timer, end_timer);
 
 	// plot the flowpipes in the x-y plane
@@ -166,7 +171,7 @@ int main()
 		exit(1);
 	}
 
-	ofstream result_output("./outputs/nn_13_relu.txt");
+	ofstream result_output("./outputs/nn_1_relu_tanh.txt");
 	if (result_output.is_open())
 	{
         result_output << reach_result << endl;
@@ -175,7 +180,7 @@ int main()
 	}
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_13_relu", result);
+	plot_setting.plot_2D_interval_GNUPLOT("nn_1_relu_tanh", result);
 
 	return 0;
 }

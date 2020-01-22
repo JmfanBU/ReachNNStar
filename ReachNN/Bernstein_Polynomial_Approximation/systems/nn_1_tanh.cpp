@@ -94,7 +94,7 @@ int main()
 	char const *degree_bound = "[3, 3]";
 	char const *activation = "tanh";
 	char const *output_index = "0";
-	char const *neural_network = "nn_13_tanh";
+	char const *neural_network = "nn_1_tanh";
 
 	double err_max = 0;
 	time_t start_timer;
@@ -171,7 +171,7 @@ int main()
 		exit(1);
 	}
 
-	ofstream result_output("./outputs/nn_13_tanh.txt");
+	ofstream result_output("./outputs/nn_1_tanh.txt");
 	if (result_output.is_open())
 	{
         result_output << reach_result << endl;
@@ -180,7 +180,7 @@ int main()
 	}
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_13_tanh", result);
+	plot_setting.plot_2D_interval_GNUPLOT("nn_1_tanh", result);
 
 	return 0;
 }

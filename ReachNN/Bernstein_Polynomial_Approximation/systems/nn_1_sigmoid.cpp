@@ -31,11 +31,7 @@ int main()
 
 	Deterministic_Continuous_Dynamics dynamics(ode_rhs);
 
-
-
-
 	// Specify the parameters for reachability computation.
-
 	Computational_Setting setting;
 
 	unsigned int order = 8;
@@ -74,9 +70,6 @@ int main()
 	X0.push_back(init_x1);
 	X0.push_back(init_u);
 
-
-
-
 	// translate the initial set to a flowpipe
 	Flowpipe initial_set(X0);
 
@@ -92,9 +85,9 @@ int main()
 	char const *function_name2 = "poly_approx_error";
 	char const *function_name3 = "network_lips";
 	char const *degree_bound = "[3, 3]";
-	char const *activation = "ReLU_tanh";
+	char const *activation = "sigmoid";
 	char const *output_index = "0";
-	char const *neural_network = "nn_13_relu_tanh";
+	char const *neural_network = "nn_1_sigmoid";
 
 	double err_max = 0;
 	time_t start_timer;
@@ -112,6 +105,7 @@ int main()
 
 		string strExpU = bernsteinPolyApproximation(module_name, function_name1, degree_bound, strBox.c_str(), activation, output_index, neural_network);
 
+
 		double err = stod(bernsteinPolyApproximation(module_name, function_name2, degree_bound, strBox.c_str(), activation, output_index, neural_network));
 
 		if (err >= err_max)
@@ -124,8 +118,9 @@ int main()
 		TaylorModel<Real> tm_u;
 		exp_u.evaluate(tm_u, initial_set.tmvPre.tms, order, initial_set.domain, setting.tm_setting.cutoff_threshold, setting.g_setting);
 
-		tm_u.remainder.bloat(err);
 
+
+		tm_u.remainder.bloat(err);
 
 		initial_set.tmvPre.tms[u_id] = tm_u;
 
@@ -154,7 +149,6 @@ int main()
         reach_result = "Verification result: No(35)";
     }
 
-
 	time(&end_timer);
 	seconds = difftime(start_timer, end_timer);
 
@@ -171,7 +165,7 @@ int main()
 		exit(1);
 	}
 
-	ofstream result_output("./outputs/nn_13_relu_tanh.txt");
+	ofstream result_output("./outputs/nn_1_sigmoid.txt");
 	if (result_output.is_open())
 	{
         result_output << reach_result << endl;
@@ -180,7 +174,7 @@ int main()
 	}
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_13_relu_tanh", result);
+	plot_setting.plot_2D_interval_GNUPLOT("nn_1_sigmoid", result);
 
 	return 0;
 }
