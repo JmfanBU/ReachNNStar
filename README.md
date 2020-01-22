@@ -13,19 +13,18 @@ and integrate the function of Verification-aware Knwoledge
 Distillation. We achieved at least 3X faster verification running time
 compared to the original ReachNN tool.
 
+## Execution on VM
+
+ReachNN* can be tested in [Virtual Machine](), please download it and
+import the .ova file using Oracle VM Virtual Box.
 
 ## Installation
-
-### Install Dependencies
-Our tool depend on Flow* tool and several python libraries. The following are
-the installation procedure of the dependencies. We provide two ways to
-install dependencies.
 
 #### System Requirements
 Ubuntu 18.04, Python 3.6
 
 #### Up-to-date Installation
-- Install dependencies
+- Install dependencies through apt-get install
 ```
 sudo apt-get install m4 libgmp3-dev libmpfr-dev libmpfr-doc libgsl-dev gsl-bin bison flex gnuplot-x11 libglpk-dev gcc-8 g++-8 libopenmpi-dev
 ```
@@ -41,60 +40,22 @@ source ~/venv/bin/activate
 
 pip install pip --upgrade
 
-pip install tensorflow # or tensorflow-gpu, tensoflow 2.0 is not
-compatible with our code
+pip install tensorflow==1.15.0 # or tensorflow-gpu, tensoflow 2.0 has not been tested.
 
 pip install sympy mpi4py scipy h5py
 
 ```
 
-#### Stable Installation
-```
-cd packages
 
-sudo dpkg -i *.deb
-
-cd python
-
-sudo pip3 install -U virtualenv/virtualenv-16.7.7-py2.py3-none-any.whl
-
-virtualenv --system-site-packages -p python3 ~/venv
-
-source ~/venv/bin/activate
-
-pip install pip/pip-19.3.1-py2.py3-none-any.whl
-
-cd tensorflow
-
-pip install *.gz
-
-pip install *.whl
-
-cd ../sympy
-
-pip install *.gz
-
-pip install *.whl
-
-cd ..
-
-pip install mpi4py/mpi4py-3.0.2.tar.gz
-
-pip install scipy/scipy-1.3.1-cp36-cp36m-manylinux1_x86_64.whl
-
-pip install h5py/h5py-2.10.0-cp36-cp36m-manylinux1_x86_64.whl
+#### Compile Flow* and ReachNN
 
 ```
 
-### Compile Flow* and ReachNN
+./compile.sh # under the root directory ./ReachNNStar/
 
 ```
 
-./compile.sh # under the root directory
-
-```
-
-### Runing Example
+## Runing Example
 
 NOTE: All the capitalized word is the input argument and have no suffix.
 
@@ -106,9 +67,9 @@ source ~/venv/bin/activate
 
 ```
 
-#### Reachability Analysis for NNCS
+### Reachability Analysis for NNCS
 
-##### This will replicate the experiments results from #1 to #5.
+#### This will replicate the experiments results from #1 to #5.
 
 ```
 
@@ -132,7 +93,7 @@ cd images
 
 The ploted result will be in images folder with the same filename as the example.
 
-##### Run individual results
+#### Run individual results
 Please refer to the template in run_exp.sh
 
 The NN description file is in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/nn
@@ -145,9 +106,9 @@ The cpp file should be saved in ReachNNTool/ReachNN/Bernstein_Polynomial_Approxi
 
 ```
 
-#### Verification-Aware Knowledge Distillation
+### Verification-Aware Knowledge Distillation
 
-##### This will replicate the running example
+#### This will replicate the running example
 ```
 
 cd VF_Retraining
@@ -161,7 +122,7 @@ The one with origin as suffix is the result of original NN.
 
 The one with 1 as suffix is the result of the distilled NN.
 
-##### Run Individual Task
+#### Run Individual Task
 ```
 
 cd VF_Retraining
