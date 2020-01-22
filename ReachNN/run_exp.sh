@@ -26,4 +26,8 @@
 ./example.sh nn_18_relu 4e-3 &&\
 ./example.sh nn_18_sigmoid 4e-3 &&\
 ./example.sh nn_18_tanh 4e-3 &&\
-./example.sh nn_18_relu_tanh 4e-3
+./example.sh nn_18_relu_tanh 4e-3 &&\
+
+# Generate Plot
+cd outputs &&\
+gnuplot *.plt
