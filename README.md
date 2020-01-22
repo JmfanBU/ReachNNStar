@@ -1,6 +1,18 @@
-# ReachNN
-A tool for reachability analysis of neural-network controlled systems
-(NNCSs).
+# ReachNN*
+ReachNN* is a reachability analysis approach based on Bernstein
+polynomials that can verify neural-network controlled systems (NNCSs)
+with a more general form of activation functions. We further explore how
+certain property, like Lipschitz constant, of the network influences the
+verification result and propose a new Verification-aware Knowledge
+Distillation method to distill a new neural network controller that is
+more verification-friendly and retain the knowledge from the orignal
+nerual network controller.
+
+ReachNN* is a GPU implementation of the original proposed ReachNN tool
+and integrate the function of Verification-aware Knwoledge
+Distillation. We achieved at least 3X faster verification running time
+compared to the original ReachNN tool.
+
 
 ## Installation
 
@@ -14,6 +26,7 @@ install dependencies.
 ```
 sudo apt-get install libgmp3-dev libmpfr-dev libmpfr-doc libmpfr4
 libmpfr4-dbg gsl-bin libgs10-dev bison flex gnuplot-x11 libglpk-dev
+gcc-8
 ```
 - Install python libraries
 ```
@@ -203,5 +216,5 @@ C.Huang, J.Fan, W.Li, X.Chen, and Q.Zhu.
 ACM Transactions on Embedded Computing Systems, 18:1–22, 10 2019. doi: 10.1145/3358228.
 
 J.Fan, C.Huang, W.Li, X.Chen, and Q.Zhu.
-[Towards Verification-Aware Knowledge Distillation for Neural-Network Controlled Systems](https://c14bd503-27bf-48fd-84d6-d3e32a0824a1.filesusr.com/ugd/290ef0_07128247dc83481e97d03bb91505ec8c.pdf).
+[Towards Verification-Aware Knowledge Distillation for Neural-Network Controlled Systems](https://ieeexplore.ieee.org/abstract/document/8942059).
 International Conference on Computer Aided Design (ICCAD), November 2019.
