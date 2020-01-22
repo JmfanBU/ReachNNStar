@@ -87,7 +87,7 @@ int main()
 	char const *degree_bound = "[3, 3]";
 	char const *activation = "sigmoid";
 	char const *output_index = "0";
-	char const *neural_network = "nn_14_sigmoid";
+	char const *neural_network = "nn_3_sigmoid";
 
 	double err_max = 0;
 	time_t start_timer;
@@ -133,18 +133,18 @@ int main()
 		}
 	}
 
-    vector<Interval> end_box;
-    string reach_result;
-    reach_result = "Verification result: Unknown(35)";
-    result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
+	vector<Interval> end_box;
+	string reach_result;
+	reach_result = "Verification result: Unknown(35)";
+	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
 
-    if(end_box[0].inf() >= 0.2 && end_box[0].sup() <= 0.3 && end_box[1].inf() >= -0.3 && end_box[1].sup() <= -0.05){
-        reach_result = "Verification result: Yes(35)";
-    }
+	if(end_box[0].inf() >= 0.2 && end_box[0].sup() <= 0.3 && end_box[1].inf() >= -0.3 && end_box[1].sup() <= -0.05){
+		reach_result = "Verification result: Yes(35)";
+	}
 
-    if(end_box[0].inf() >= 0.3 || end_box[0].sup() <= 0.2 || end_box[1].inf() >= -0.05 || end_box[1].sup() <= -0.3){
-        reach_result = "Verification result: No(35)";
-    }
+	if(end_box[0].inf() >= 0.3 || end_box[0].sup() <= 0.2 || end_box[1].inf() >= -0.05 || end_box[1].sup() <= -0.3){
+		reach_result = "Verification result: No(35)";
+	}
 
 	time(&end_timer);
 	seconds = difftime(start_timer, end_timer);
@@ -162,16 +162,19 @@ int main()
 		exit(1);
 	}
 
-	ofstream result_output("./outputs/nn_14_sigmoid.txt");
+	std::string err_max_str = "Max Error: " + std::to_string(err_max);
+	std::string running_time = "Running Time: " + std::to_string(-seconds);
+
+	ofstream result_output("./outputs/nn_3_sigmoid.txt");
 	if (result_output.is_open())
 	{
-        result_output << reach_result << endl;
-		result_output << err_max << endl;
-		result_output << seconds << endl;
+		result_output << reach_result << endl;
+		result_output << err_max_str << endl;
+		result_output << running_time << endl;
 	}
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_14_sigmoid", result);
+	plot_setting.plot_2D_interval_GNUPLOT("nn_3_sigmoid", result);
 
 	return 0;
 }

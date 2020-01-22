@@ -31,14 +31,10 @@ int main()
 
 	Deterministic_Continuous_Dynamics dynamics(ode_rhs);
 
-
-
-
 	// Specify the parameters for reachability computation.
-
 	Computational_Setting setting;
 
-	unsigned int order = 8;
+	unsigned int order = 10;
 
 	// stepsize and order for reachability analysis
 	setting.setFixedStepsize(0.01, order);
@@ -60,7 +56,7 @@ int main()
 	vector<Interval> remainder_estimation(numVars, I);
 	setting.setRemainderEstimation(remainder_estimation);
 
-	setting.printOff();
+    setting.printOff();
 
 	setting.prepare();
 
@@ -68,11 +64,14 @@ int main()
 	 * Initial set can be a box which is represented by a vector of intervals.
 	 * The i-th component denotes the initial set of the i-th state variable.
 	 */
-	Interval init_x0(0.7, 0.9), init_x1(0.7, 0.9), init_u(0);
+	Interval init_x0(0.7,0.9), init_x1(0.7,0.9), init_u(0);
 	std::vector<Interval> X0;
 	X0.push_back(init_x0);
 	X0.push_back(init_x1);
 	X0.push_back(init_u);
+
+
+
 
 	// translate the initial set to a flowpipe
 	Flowpipe initial_set(X0);
@@ -88,19 +87,19 @@ int main()
 	char const *function_name1 = "poly_approx_controller";
 	char const *function_name2 = "poly_approx_error";
 	char const *function_name3 = "network_lips";
-	char const *degree_bound = "[3, 3]";
-	char const *activation = "sigmoid";
+	char const *degree_bound = "[4, 4]";
+	char const *activation = "ReLU_tanh";
 	char const *output_index = "0";
-	char const *neural_network = "nn_12_sigmoid";
+	char const *neural_network = "nn_2_relu_tanh";
 
 	double err_max = 0;
-	time_t start_timer;
-	time_t end_timer;
-	double seconds;
-	time(&start_timer);
+    time_t start_timer;
+    time_t end_timer;
+    double seconds;
+    time(&start_timer);
 
-	// perform 9 control steps
-	for (int iter = 0; iter < 9; ++iter)
+	// perform 7 control steps
+	for(int iter=0; iter<7; ++iter)
 	{
 		vector<Interval> box;
 		initial_set.intEval(box, order, setting.tm_setting.cutoff_threshold);
@@ -121,13 +120,15 @@ int main()
 		TaylorModel<Real> tm_u;
 		exp_u.evaluate(tm_u, initial_set.tmvPre.tms, order, initial_set.domain, setting.tm_setting.cutoff_threshold, setting.g_setting);
 
+
+
 		tm_u.remainder.bloat(err);
 
 		initial_set.tmvPre.tms[u_id] = tm_u;
 
 		dynamics.reach(result, setting, initial_set, unsafeSet);
 
-		if (result.status == COMPLETED_SAFE || result.status == COMPLETED_UNSAFE || result.status == COMPLETED_UNKNOWN)
+		if(result.status == COMPLETED_SAFE || result.status == COMPLETED_UNSAFE || result.status == COMPLETED_UNKNOWN)
 		{
 			initial_set = result.fp_end_of_time;
 		}
@@ -139,20 +140,19 @@ int main()
 
     vector<Interval> end_box;
     string reach_result;
-    reach_result = "Verification result: Unknown(9)";
+    reach_result = "Verification result: Unknown(7)";
     result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
 
     if(end_box[0].inf() >= -0.3 && end_box[0].sup() <= 0.1 && end_box[1].inf() >= -0.35 && end_box[1].sup() <= 0.5){
-        reach_result = "Verification result: Yes(9)";
+        reach_result = "Verification result: Yes(7)";
     }
 
     if(end_box[0].inf() >= 0.1 || end_box[0].sup() <= -0.3 || end_box[1].inf() >= 0.5 || end_box[1].sup() <= -0.35){
-        reach_result = "Verification result: No(9)";
+        reach_result = "Verification result: No(7)";
     }
 
-	time(&end_timer);
-
-	seconds = difftime(start_timer, end_timer);
+    time(&end_timer);
+    seconds = difftime(start_timer, end_timer);
 
 	// plot the flowpipes in the x-y plane
 	result.transformToTaylorModels(setting);
@@ -161,22 +161,25 @@ int main()
 	plot_setting.setOutputDims(x0_id, x1_id);
 
 	int mkres = mkdir("./outputs", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-	if (mkres < 0 && errno != EEXIST)
+	if(mkres < 0 && errno != EEXIST)
 	{
 		printf("Can not create the directory for images.\n");
 		exit(1);
 	}
 
-	ofstream result_output("./outputs/nn_12_sigmoid.txt");
+    std::string err_max_str = "Max Error: " + std::to_string(err_max);
+    std::string running_time = "Running Time: " + std::to_string(-seconds);
+
+	ofstream result_output("./outputs/nn_2_relu_tanh.txt");
 	if (result_output.is_open())
 	{
         result_output << reach_result << endl;
-		result_output << err_max << endl;
-		result_output << -seconds << endl;
+		result_output << err_max_str << endl;
+		result_output << running_time << endl;
 	}
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_12_sigmoid", result);
+	plot_setting.plot_2D_interval_GNUPLOT("nn_2_relu_tanh", result);
 
 	return 0;
 }

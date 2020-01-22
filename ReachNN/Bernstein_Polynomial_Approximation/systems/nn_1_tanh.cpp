@@ -171,12 +171,15 @@ int main()
 		exit(1);
 	}
 
+    std::string err_max_str = "Max Error: " + std::to_string(err_max);
+    std::string running_time = "Running Time: " + std::to_string(-seconds);
+
 	ofstream result_output("./outputs/nn_1_tanh.txt");
 	if (result_output.is_open())
 	{
         result_output << reach_result << endl;
-		result_output << err_max << endl;
-		result_output << -seconds << endl;
+		result_output << err_max_str << endl;
+		result_output << running_time << endl;
 	}
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
