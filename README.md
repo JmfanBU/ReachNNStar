@@ -24,7 +24,7 @@ install dependencies.
 #### Up-to-date Installation
 - Install dependencies
 ```
-sudo apt-get install m4 libgmp3-dev libmpfr-dev libmpfr-doc gsl-bin bison flex gnuplot-x11 libglpk-dev gcc-8 libopenmpi-dev
+sudo apt-get install m4 libgmp3-dev libmpfr-dev libmpfr-doc gsl-bin bison flex gnuplot-x11 libglpk-dev gcc-8 g++-8 libopenmpi-dev
 ```
 - Install python libraries
 ```
