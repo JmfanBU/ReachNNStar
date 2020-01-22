@@ -22,9 +22,9 @@ the installation procedure of the dependencies. We provide two ways to
 install dependencies.
 
 #### Up-to-date Installation
-- Install Flow* libraries
+- Install dependencies
 ```
-sudo apt-get install m4 libgmp3-dev libmpfr-dev libmpfr-doc gsl-bin bison flex gnuplot-x11 libglpk-dev gcc-8
+sudo apt-get install m4 libgmp3-dev libmpfr-dev libmpfr-doc gsl-bin bison flex gnuplot-x11 libglpk-dev gcc-8 libopenmpi-dev
 ```
 - Install python libraries
 ```
