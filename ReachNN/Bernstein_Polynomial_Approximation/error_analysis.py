@@ -240,8 +240,8 @@ def bernstein_error_partition_cuda(
     all_sample_points_batches = np.split(all_sample_points, batch_idx, axis=0)
     all_shift_points_batches = np.split(all_shift_points, batch_idx, axis=0)
 
-    poly_results = np.zeros((all_sample_points.shape[0], 1))
-    nn_results = np.zeros((all_sample_points.shape[0], 1))
+    poly_results = np.zeros((all_sample_points.shape[0], 1), dtype=np.float32)
+    nn_results = np.zeros((all_sample_points.shape[0], 1), dtype=np.float32)
 
     with U.make_session() as sess:
         sess.run(tf.global_variables_initializer())
