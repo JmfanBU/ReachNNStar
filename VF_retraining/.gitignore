@@ -1,9 +1,20 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 
 # C extensions
 *.so
+*.o
+*.a
 
 # Distribution / packaging
 .Python
@@ -55,3 +66,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# temperory data
+*.hdf5
