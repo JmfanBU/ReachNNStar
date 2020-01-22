@@ -220,7 +220,7 @@ International Conference on Computer Aided Design (ICCAD), November 2019.
 ## Common Issues
 ### m4: unrecognized option '--gnu'
 To fix this problem, try to reinstall m4 first
-"""
+```
 sudo apt-get install --reinstall m4
-"""
+```
 
