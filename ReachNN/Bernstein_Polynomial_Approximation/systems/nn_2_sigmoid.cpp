@@ -137,18 +137,18 @@ int main()
 		}
 	}
 
-    vector<Interval> end_box;
-    string reach_result;
-    reach_result = "Verification result: Unknown(9)";
-    result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
+	vector<Interval> end_box;
+	string reach_result;
+	reach_result = "Verification result: Unknown(9)";
+	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
 
-    if(end_box[0].inf() >= -0.3 && end_box[0].sup() <= 0.1 && end_box[1].inf() >= -0.35 && end_box[1].sup() <= 0.5){
-        reach_result = "Verification result: Yes(9)";
-    }
+	if(end_box[0].inf() >= -0.3 && end_box[0].sup() <= 0.1 && end_box[1].inf() >= -0.35 && end_box[1].sup() <= 0.5){
+		reach_result = "Verification result: Yes(9)";
+	}
 
-    if(end_box[0].inf() >= 0.1 || end_box[0].sup() <= -0.3 || end_box[1].inf() >= 0.5 || end_box[1].sup() <= -0.35){
-        reach_result = "Verification result: No(9)";
-    }
+	if(end_box[0].inf() >= 0.1 || end_box[0].sup() <= -0.3 || end_box[1].inf() >= 0.5 || end_box[1].sup() <= -0.35){
+		reach_result = "Verification result: No(9)";
+	}
 
 	time(&end_timer);
 
@@ -167,13 +167,13 @@ int main()
 		exit(1);
 	}
 
-    std::string err_max_str = "Max Error: " + std::to_string(err_max);
-    std::string running_time = "Running Time: " + std::to_string(-seconds);
+	std::string err_max_str = "Max Error: " + std::to_string(err_max);
+	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
 
 	ofstream result_output("./outputs/nn_2_sigmoid.txt");
 	if (result_output.is_open())
 	{
-        result_output << reach_result << endl;
+		result_output << reach_result << endl;
 		result_output << err_max_str << endl;
 		result_output << running_time << endl;
 	}

@@ -135,15 +135,15 @@ int main()
 
 	vector<Interval> end_box;
 	string reach_result;
-	reach_result = "Verification result: Unknown(35)";
+	reach_result = "Verification result: Unknown(60)";
 	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
 
 	if(end_box[0].inf() >= 0.2 && end_box[0].sup() <= 0.3 && end_box[1].inf() >= -0.3 && end_box[1].sup() <= -0.05){
-		reach_result = "Verification result: Yes(35)";
+		reach_result = "Verification result: Yes(60)";
 	}
 
 	if(end_box[0].inf() >= 0.3 || end_box[0].sup() <= 0.2 || end_box[1].inf() >= -0.05 || end_box[1].sup() <= -0.3){
-		reach_result = "Verification result: No(35)";
+		reach_result = "Verification result: No(60)";
 	}
 
 	time(&end_timer);
@@ -163,7 +163,7 @@ int main()
 	}
 
 	std::string err_max_str = "Max Error: " + std::to_string(err_max);
-	std::string running_time = "Running Time: " + std::to_string(-seconds);
+	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
 
 	ofstream result_output("./outputs/nn_3_sigmoid.txt");
 	if (result_output.is_open())

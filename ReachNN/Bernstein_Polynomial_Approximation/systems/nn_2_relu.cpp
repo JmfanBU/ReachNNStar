@@ -32,10 +32,8 @@ int main()
 	Deterministic_Continuous_Dynamics dynamics(ode_rhs);
 
 
-
-	
 	// Specify the parameters for reachability computation.
-	
+
 	Computational_Setting setting;
 
 	unsigned int order = 5;
@@ -95,12 +93,12 @@ setting.printOff();
 	char const *activation = "ReLU";
 	char const *output_index = "0";
 	char const *neural_network = "nn_2_relu";
-	
+
 	double err_max = 0;
-    time_t start_timer;
-    time_t end_timer;
-    double seconds;
-    time(&start_timer);
+	time_t start_timer;
+	time_t end_timer;
+	double seconds;
+	time(&start_timer);
 
 	// perform 9 control steps
 	for(int iter=0; iter<9; ++iter)
@@ -111,8 +109,6 @@ setting.printOff();
 		string strBox = "[" + box[0].toString() + "," + box[1].toString() + "]";
 
 		string strExpU = bernsteinPolyApproximation(module_name, function_name1, degree_bound, strBox.c_str(), activation, output_index, neural_network);
-		
-		
 		double err = stod(bernsteinPolyApproximation(module_name, function_name2, degree_bound, strBox.c_str(), activation, output_index, neural_network));
 
 		if (err >= err_max)
@@ -141,21 +137,21 @@ setting.printOff();
 		}
 	}
 
-    vector<Interval> end_box;
-    string reach_result;
-    reach_result = "Verification result: Unknown(9)";
-    result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
+	vector<Interval> end_box;
+	string reach_result;
+	reach_result = "Verification result: Unknown(9)";
+	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
 
-    if(end_box[0].inf() >= -0.3 && end_box[0].sup() <= 0.1 && end_box[1].inf() >= -0.35 && end_box[1].sup() <= 0.5){
-        reach_result = "Verification result: Yes(9)";
-    }
+	if(end_box[0].inf() >= -0.3 && end_box[0].sup() <= 0.1 && end_box[1].inf() >= -0.35 && end_box[1].sup() <= 0.5){
+		reach_result = "Verification result: Yes(9)";
+	}
 
-    if(end_box[0].inf() >= 0.1 || end_box[0].sup() <= -0.3 || end_box[1].inf() >= 0.5 || end_box[1].sup() <= -0.35){
-        reach_result = "Verification result: No(9)";
-    }
+	if(end_box[0].inf() >= 0.1 || end_box[0].sup() <= -0.3 || end_box[1].inf() >= 0.5 || end_box[1].sup() <= -0.35){
+		reach_result = "Verification result: No(9)";
+	}
 
-    time(&end_timer);
-    seconds = difftime(start_timer, end_timer);
+	time(&end_timer);
+	seconds = difftime(start_timer, end_timer);
 
 	// plot the flowpipes in the x-y plane
 	result.transformToTaylorModels(setting);
@@ -170,13 +166,13 @@ setting.printOff();
 		exit(1);
 	}
 
-    std::string err_max_str = "Max Error: " + std::to_string(err_max);
-    std::string running_time = "Running Time: " + std::to_string(-seconds);
+	std::string err_max_str = "Max Error: " + std::to_string(err_max);
+	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
 
 	ofstream result_output("./outputs/nn_2_relu.txt");
 	if (result_output.is_open())
 	{
-        result_output << reach_result << endl;
+		result_output << reach_result << endl;
 		result_output << err_max_str << endl;
 		result_output << running_time << endl;
 	}
@@ -184,5 +180,5 @@ setting.printOff();
 	// the file name is example.m and it is put in the subdir outputs
 	plot_setting.plot_2D_interval_GNUPLOT("nn_2_relu", result);
 
-    return 0;
+	return 0;
 }

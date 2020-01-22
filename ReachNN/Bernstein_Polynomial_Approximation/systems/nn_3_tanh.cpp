@@ -166,7 +166,7 @@ int main()
 	}
 
 	std::string err_max_str = "Max Error: " + std::to_string(err_max);
-	std::string running_time = "Running Time: " + std::to_string(-seconds);
+	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
 
 	ofstream result_output("./outputs/nn_3_tanh.txt");
 	if (result_output.is_open())
