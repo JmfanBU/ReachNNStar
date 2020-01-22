@@ -166,8 +166,8 @@ int main()
 		exit(1);
 	}
 
-    std::string err_max_str = "Max Error: " + std::to_string(err_max)
-    std::string running_time = "Running Time: " + std::to_string(-seconds)
+    std::string err_max_str = "Max Error: " + std::to_string(err_max);
+    std::string running_time = "Running Time: " + std::to_string(-seconds);
 
 	ofstream result_output("./outputs/nn_1_relu.txt");
 	if (result_output.is_open())
