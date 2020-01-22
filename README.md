@@ -21,10 +21,13 @@ Our tool depend on Flow* tool and several python libraries. The following are
 the installation procedure of the dependencies. We provide two ways to
 install dependencies.
 
+#### System Requirements
+Ubuntu 18.04, Python 3.6
+
 #### Up-to-date Installation
 - Install dependencies
 ```
-sudo apt-get install m4 libgmp3-dev libmpfr-dev libmpfr-doc gsl-bin bison flex gnuplot-x11 libglpk-dev gcc-8 g++-8 libopenmpi-dev
+sudo apt-get install m4 libgmp3-dev libmpfr-dev libmpfr-doc libgsl-dev gsl-bin bison flex gnuplot-x11 libglpk-dev gcc-8 g++-8 libopenmpi-dev
 ```
 - Install python libraries
 ```
