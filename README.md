@@ -24,7 +24,7 @@ install dependencies.
 #### Up-to-date Installation
 - Install Flow* libraries
 ```
-sudo apt-get install libgmp3-dev libmpfr-dev libmpfr-doc gsl-bin bison flex gnuplot-x11 libglpk-dev gcc-8
+sudo apt-get install m4 libgmp3-dev libmpfr-dev libmpfr-doc gsl-bin bison flex gnuplot-x11 libglpk-dev gcc-8
 ```
 - Install python libraries
 ```
@@ -216,3 +216,11 @@ ACM Transactions on Embedded Computing Systems, 18:1–22, 10 2019. doi: 10.1145
 J.Fan, C.Huang, W.Li, X.Chen, and Q.Zhu.
 [Towards Verification-Aware Knowledge Distillation for Neural-Network Controlled Systems](https://ieeexplore.ieee.org/abstract/document/8942059).
 International Conference on Computer Aided Design (ICCAD), November 2019.
+
+## Common Issues
+### m4: unrecognized option '--gnu'
+To fix this problem, try to reinstall m4 first
+"""
+sudo apt-get install --reinstall m4
+"""
+
