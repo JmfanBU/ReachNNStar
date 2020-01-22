@@ -1,8 +1,8 @@
 # Example 1
-./example.sh nn_13_relu 1e-3 &&\
-./example.sh nn_13_sigmoid 5e-3 &&\
-./example.sh nn_13_tanh 5e-3 &&\
-./example.sh nn_13_relu_tanh 5e-3 &&\
+./example.sh nn_1_relu 1e-3 &&\
+./example.sh nn_1_sigmoid 5e-3 &&\
+./example.sh nn_1_tanh 5e-3 &&\
+./example.sh nn_1_relu_tanh 5e-3 &&\
 
 # Example 2
 ./example.sh nn_12_relu 1e-2 &&\
