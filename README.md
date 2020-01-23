@@ -22,7 +22,7 @@ import the .ova file using Oracle VM Virtual Box.
 ## Installation
 
 #### System Requirements
-Ubuntu 18.04, Python 3.6
+Ubuntu 16.04, Python 3.5
 
 #### Up-to-date Installation
 - Install dependencies through apt-get install
@@ -114,7 +114,7 @@ The cpp file should be saved in ReachNNTool/ReachNN/Bernstein_Polynomial_Approxi
 
 cd VF_Retraining
 
-./run_distillation
+./run_distillation.sh
 
 ```
 Please check the result in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/outputs/nn_13_relu_tanh_*
