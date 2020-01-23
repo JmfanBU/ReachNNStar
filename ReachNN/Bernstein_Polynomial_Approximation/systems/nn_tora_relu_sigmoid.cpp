@@ -66,7 +66,7 @@ int main()
 	vector<Interval> remainder_estimation(numVars, I);
 	setting.setRemainderEstimation(remainder_estimation);
 
-	setting.printOff();
+setting.printOff();
 
 	setting.prepare();
 
@@ -98,43 +98,95 @@ int main()
 	char const *function_name2 = "poly_approx_error";
 	char const *function_name3 = "network_lips";
 	char const *degree_bound = "[1, 1, 1, 1]";
-	char const *activation = "ReLU";
+//	char const *activation = "ReLU";
+	char const *activation = "ReLU_sigmoid";
 	char const *output_index = "0";
-	char const *neural_network = "nn_tora_relu";
-	double err_max = 0;
+	char const *neural_network = "nn_tora_relu_sigmoid";
+	
+//	double pi = 3.14159;
+//	double factor = 2*pi;
+//
+    double err_max = 0;
 
-	time_t start_timer;
-	time_t end_timer;
-	double seconds;
-	time(&start_timer);
-	// perform 10 control steps
+    time_t start_timer;
+    time_t end_timer;
+    double seconds;
+    time(&start_timer);
+	// perform 25 control steps
 
 	for(int iter=0; iter<10; ++iter)
 	{
 		vector<Interval> box;
 		initial_set.intEval(box, order, setting.tm_setting.cutoff_threshold);
+/*		
+		if(box[1].sup() > 0)
+		{
+			for(; box[1].sup() > pi;)
+			{
+				box[1].setSup(box[1].sup() - factor);
+				box[1].setInf(box[1].inf() - factor);
+			}
+		}
+		else
+		{
+			for(; box[1].inf() < -pi;)
+			{
+				box[1].setSup(box[1].sup() + factor);
+				box[1].setInf(box[1].inf() + factor);
+			}
+		}
+*/		
 
 		string strBox = "[" + box[0].toString() + "," + box[1].toString() + "," + box[2].toString() + "," + box[3].toString() + "]";
+//cout << strBox <<endl;
 
 		string strExpU = bernsteinPolyApproximation(module_name, function_name1, degree_bound, strBox.c_str(), activation, output_index, neural_network);
-		double err = stod(bernsteinPolyApproximation(module_name, function_name2, degree_bound, strBox.c_str(), activation, output_index, neural_network));
+		
+		
+		// double err = stod(bernsteinPolyApproximation(module_name, function_name2, degree_bound, strBox.c_str(), activation, output_index, neural_network));
+        double err = 0.01;
 
-		if (err >= err_max)
-		{
-			err_max = err;
-		}
+        // if (err <= 0.01)
+        // {
+        //     degree_bound = "[1, 1, 1, 1]";
+        // }
+        // if (err > 0.01)
+        // {
+        //     degree_bound = "[2, 2, 2, 2]";
+        // }
+        printf("%e\n", err);
+        if (err >= err_max)
+        {
+            err_max = err;
+        }
 
 
-		Expression_AST<Real> exp_u(strExpU);
+    	Expression_AST<Real> exp_u(strExpU);
 
 		TaylorModel<Real> tm_u;
 		exp_u.evaluate(tm_u, initial_set.tmvPre.tms, order, initial_set.domain, setting.tm_setting.cutoff_threshold, setting.g_setting);
 
 		tm_u.remainder.bloat(err);
 
+//Interval range_of_flowpipe;
+//tm_u.intEvalNormal(range_of_flowpipe, setting.tm_setting.step_exp_table);
+
+//cout << range_of_flowpipe << "\n";
+
+		
+	
 		initial_set.tmvPre.tms[u_id] = tm_u;
+		
+/*		
+TaylorModelVec<Real> tmvTemp;
+initial_set.compose(tmvTemp, order, setting.tm_setting.cutoff_threshold);
+tmvTemp.tms[u_id].intEval(range_of_flowpipe, initial_set.domain);
+
+cout << range_of_flowpipe << "\n";
+*/
 
 		dynamics.reach(result, setting, initial_set, unsafeSet);
+
 
 		if(result.status == COMPLETED_SAFE || result.status == COMPLETED_UNSAFE || result.status == COMPLETED_UNKNOWN)
 		{
@@ -145,22 +197,8 @@ int main()
 			printf("Terminated due to too large overestimation.\n");
 		}
 	}
-
-	vector<Interval> end_box;
-	string reach_result;
-	reach_result = "Verification result: Unknown(10)";
-	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
-
-	if(end_box[0].inf() >= -0.1 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= -0.9 && end_box[1].sup() <= -0.6){
-		reach_result = "Verification result: Yes(10)";
-	}
-
-	if(end_box[0].inf() >= -0.1 || end_box[0].sup() <= 0.2 || end_box[1].inf() >= -0.9 || end_box[1].sup() <= -0.6){
-		reach_result = "Verification result: No(10)";
-	}
-
-	time(&end_timer);
-	seconds = difftime(start_timer, end_timer);
+    time(&end_timer);
+    seconds = difftime(start_timer, end_timer);
 
 	// plot the flowpipes in the x-y plane
 	result.transformToTaylorModels(setting);
@@ -175,20 +213,16 @@ int main()
 		exit(1);
 	}
 
-	std::string err_max_str = "Max Error: " + std::to_string(err_max);
-	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
-
-	ofstream result_output("./outputs/nn_tora_relu.txt");
+	ofstream result_output("./outputs/nn_tora_relu_sigmoid.txt");
 	if (result_output.is_open())
 	{
-		result_output << reach_result << endl;
-		result_output << err_max_str << endl;
-		result_output << running_time << endl;
+		result_output << err_max << endl;
+		result_output << seconds << endl;
 	}
 
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_tora_relu", result);
+	plot_setting.plot_2D_interval_MATLAB("nn_tora_relu_sigmoid", result);
 
 	return 0;
 }

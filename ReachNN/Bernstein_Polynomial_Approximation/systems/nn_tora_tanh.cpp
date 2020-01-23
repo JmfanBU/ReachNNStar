@@ -39,9 +39,7 @@ int main()
 
 
 
-	
 	// Specify the parameters for reachability computation.
-	
 	Computational_Setting setting;
 
 	unsigned int order = 5;
@@ -65,7 +63,6 @@ int main()
 	Interval I(-0.01, 0.01);
 	vector<Interval> remainder_estimation(numVars, I);
 	setting.setRemainderEstimation(remainder_estimation);
-
 	setting.printOff();
 
 	setting.prepare();
@@ -74,6 +71,7 @@ int main()
 	 * Initial set can be a box which is represented by a vector of intervals.
 	 * The i-th component denotes the initial set of the i-th state variable.
 	 */
+	// Interval init_x0(0.8,0.9), init_x1(-0.5,-0.4), init_x2(-0.2, -0.1), init_x3(0.8, 0.9), init_u(0);
 	Interval init_x0(-0.77,-0.75), init_x1(-0.45,-0.43), init_x2(0.51, 0.54), init_x3(-0.3, -0.28), init_u(0);
 	std::vector<Interval> X0;
 	X0.push_back(init_x0);
@@ -98,9 +96,9 @@ int main()
 	char const *function_name2 = "poly_approx_error";
 	char const *function_name3 = "network_lips";
 	char const *degree_bound = "[1, 1, 1, 1]";
-	char const *activation = "ReLU";
+	char const *activation = "tanh";
 	char const *output_index = "0";
-	char const *neural_network = "nn_tora_relu";
+	char const *neural_network = "nn_tora_tanh";
 	double err_max = 0;
 
 	time_t start_timer;
@@ -136,6 +134,7 @@ int main()
 
 		dynamics.reach(result, setting, initial_set, unsafeSet);
 
+
 		if(result.status == COMPLETED_SAFE || result.status == COMPLETED_UNSAFE || result.status == COMPLETED_UNKNOWN)
 		{
 			initial_set = result.fp_end_of_time;
@@ -148,9 +147,6 @@ int main()
 
 	vector<Interval> end_box;
 	string reach_result;
-	reach_result = "Verification result: Unknown(10)";
-	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
-
 	if(end_box[0].inf() >= -0.1 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= -0.9 && end_box[1].sup() <= -0.6){
 		reach_result = "Verification result: Yes(10)";
 	}
@@ -178,7 +174,7 @@ int main()
 	std::string err_max_str = "Max Error: " + std::to_string(err_max);
 	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
 
-	ofstream result_output("./outputs/nn_tora_relu.txt");
+	ofstream result_output("./outputs/nn_tora_tanh.txt");
 	if (result_output.is_open())
 	{
 		result_output << reach_result << endl;
@@ -188,7 +184,7 @@ int main()
 
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_tora_relu", result);
+	plot_setting.plot_2D_interval_MATLAB("nn_tora_tanh", result);
 
 	return 0;
 }

@@ -37,11 +37,7 @@ int main()
 
 	Deterministic_Continuous_Dynamics dynamics(ode_rhs);
 
-
-
-	
 	// Specify the parameters for reachability computation.
-	
 	Computational_Setting setting;
 
 	unsigned int order = 5;
@@ -98,9 +94,9 @@ int main()
 	char const *function_name2 = "poly_approx_error";
 	char const *function_name3 = "network_lips";
 	char const *degree_bound = "[1, 1, 1, 1]";
-	char const *activation = "ReLU";
+	char const *activation = "ReLU_tanh";
 	char const *output_index = "0";
-	char const *neural_network = "nn_tora_relu";
+	char const *neural_network = "nn_tora_relu_tanh";
 	double err_max = 0;
 
 	time_t start_timer;
@@ -113,7 +109,6 @@ int main()
 	{
 		vector<Interval> box;
 		initial_set.intEval(box, order, setting.tm_setting.cutoff_threshold);
-
 		string strBox = "[" + box[0].toString() + "," + box[1].toString() + "," + box[2].toString() + "," + box[3].toString() + "]";
 
 		string strExpU = bernsteinPolyApproximation(module_name, function_name1, degree_bound, strBox.c_str(), activation, output_index, neural_network);
@@ -135,6 +130,7 @@ int main()
 		initial_set.tmvPre.tms[u_id] = tm_u;
 
 		dynamics.reach(result, setting, initial_set, unsafeSet);
+
 
 		if(result.status == COMPLETED_SAFE || result.status == COMPLETED_UNSAFE || result.status == COMPLETED_UNKNOWN)
 		{
@@ -178,7 +174,7 @@ int main()
 	std::string err_max_str = "Max Error: " + std::to_string(err_max);
 	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
 
-	ofstream result_output("./outputs/nn_tora_relu.txt");
+	ofstream result_output("./outputs/nn_tora_relu_tanh.txt");
 	if (result_output.is_open())
 	{
 		result_output << reach_result << endl;
@@ -188,7 +184,7 @@ int main()
 
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_tora_relu", result);
+	plot_setting.plot_2D_interval_MATLAB("nn_tora_relu_tanh", result);
 
 	return 0;
 }
