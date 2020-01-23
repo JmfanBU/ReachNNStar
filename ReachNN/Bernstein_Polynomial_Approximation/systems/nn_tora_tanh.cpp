@@ -105,9 +105,9 @@ int main()
 	time_t end_timer;
 	double seconds;
 	time(&start_timer);
-	// perform 10 control steps
+	// perform 7 control steps
 
-	for(int iter=0; iter<10; ++iter)
+	for(int iter=0; iter<7; ++iter)
 	{
 		vector<Interval> box;
 		initial_set.intEval(box, order, setting.tm_setting.cutoff_threshold);
@@ -147,12 +147,13 @@ int main()
 
 	vector<Interval> end_box;
 	string reach_result;
+	reach_result = "Verification result: Unknown(7)";
 	if(end_box[0].inf() >= -0.1 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= -0.9 && end_box[1].sup() <= -0.6){
-		reach_result = "Verification result: Yes(10)";
+		reach_result = "Verification result: Yes(7)";
 	}
 
 	if(end_box[0].inf() >= -0.1 || end_box[0].sup() <= 0.2 || end_box[1].inf() >= -0.9 || end_box[1].sup() <= -0.6){
-		reach_result = "Verification result: No(10)";
+		reach_result = "Verification result: No(7)";
 	}
 
 	time(&end_timer);
