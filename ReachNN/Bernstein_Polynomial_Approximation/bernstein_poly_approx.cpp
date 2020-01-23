@@ -170,9 +170,6 @@ string bernsteinPolyApproximation(char const *module_name, char const *function_
 		fprintf(stderr, "Failed to load \"%s\"\n", module_name);
 		return "1";
 	}
-	if (Py_FinalizeEx() < 0) {
-		return "120";
-	}
 	return "0";
 }
 

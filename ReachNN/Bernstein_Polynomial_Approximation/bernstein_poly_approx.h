@@ -1,7 +1,7 @@
 #ifndef bernstein_poly_approx
 #define bernstein_poly_approx
 
-#include <python3.6/Python.h>
+#include <python3.5/Python.h>
 #include <algorithm>
 #include <iostream>
 #include <list>

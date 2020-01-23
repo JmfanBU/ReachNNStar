@@ -1,1 +1,1 @@
-error_bound = 0.001
+error_bound = 0.004
