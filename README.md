@@ -114,7 +114,7 @@ The cpp file should be saved in ReachNNTool/ReachNN/Bernstein_Polynomial_Approxi
 
 cd VF_Retraining
 
-./run_distillation
+./run_distillation.sh
 
 ```
 Please check the result in ReachNNTool/ReachNN/outputs/nn_13_relu_tanh_*
