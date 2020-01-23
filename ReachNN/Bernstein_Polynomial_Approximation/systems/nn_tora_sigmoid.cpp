@@ -66,7 +66,7 @@ int main()
 	vector<Interval> remainder_estimation(numVars, I);
 	setting.setRemainderEstimation(remainder_estimation);
 
-setting.printOff();
+	setting.printOff();
 
 	setting.prepare();
 
@@ -109,9 +109,9 @@ setting.printOff();
 	time_t end_timer;
 	double seconds;
 	time(&start_timer);
-	// perform 10 control steps
+	// perform 7 control steps
 
-	for(int iter=0; iter<10; ++iter)
+	for(int iter=0; iter<7; ++iter)
 	{
 		vector<Interval> box;
 		initial_set.intEval(box, order, setting.tm_setting.cutoff_threshold);
@@ -150,15 +150,15 @@ setting.printOff();
 
 	vector<Interval> end_box;
 	string reach_result;
-	reach_result = "Verification result: Unknown(10)";
+	reach_result = "Verification result: Unknown(7)";
 	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
 
 	if(end_box[0].inf() >= -0.1 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= -0.9 && end_box[1].sup() <= -0.6){
-		reach_result = "Verification result: Yes(10)";
+		reach_result = "Verification result: Yes(7)";
 	}
 
 	if(end_box[0].inf() >= -0.1 || end_box[0].sup() <= 0.2 || end_box[1].inf() >= -0.9 || end_box[1].sup() <= -0.6){
-		reach_result = "Verification result: No(10)";
+		reach_result = "Verification result: No(7)";
 	}
 
 	time(&end_timer);
