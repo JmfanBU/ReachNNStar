@@ -19,6 +19,8 @@ ReachNN* can be tested in [Virtual
 Machine](https://drive.google.com/file/d/1PzHcbV8QnmqksN180BWLgcH04wQB_Tf9/view?usp=sharing), please download it and
 import the .ova file using Oracle VM Virtual Box.
 
+We have tested our code with memory size 3072 MB.
+
 ## Installation
 
 #### System Requirements
@@ -41,9 +43,7 @@ source ~/venv/bin/activate
 
 pip install pip --upgrade
 
-pip install tensorflow==1.15.0 # or tensorflow-gpu, tensoflow 2.0 has not been tested.
-
-pip install sympy mpi4py scipy h5py
+pip install -r requirements.txt # Run this command under the repository's root directory
 
 ```
 
