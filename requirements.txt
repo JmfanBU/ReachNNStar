@@ -1,0 +1,5 @@
+tensorflow==1.15.0
+sympy
+mpi4py
+scipy
+h5py
