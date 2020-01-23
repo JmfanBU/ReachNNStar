@@ -80,7 +80,7 @@ cd ReachNN
 
 ```
 
-The results will return to ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/outputs. To check the results, run the following code
+The results will return to ReachNNTool/ReachNN/outputs. To check the results, run the following code
 
 ```
 
@@ -117,7 +117,7 @@ cd VF_Retraining
 ./run_distillation
 
 ```
-Please check the result in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/outputs/nn_13_relu_tanh_*
+Please check the result in ReachNNTool/ReachNN/outputs/nn_13_relu_tanh_*
 
 The one with origin as suffix is the result of original NN.
 
