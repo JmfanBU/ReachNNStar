@@ -5,11 +5,22 @@ class univAprox(object):
     """
     neural network approximator
     """
-    def __init__(self, input_dim, output_dim, hidden_dim=20, layers=2, activation='RELU'):
+    def __init__(
+        self,
+        input_dim,
+        output_dim,
+        hidden_dim=20,
+        layers=2,
+        activation='RELU',
+        scalar=1,
+        offset=0
+    ):
         self.input_dim = input_dim
         self.output_dim = output_dim
         self.hidden_dim = hidden_dim
         self.layers = layers
+        self.scalar = scalar
+        self.offset = offset
 
         # activation type
         activations = activation.split('_')
@@ -135,3 +146,5 @@ class univAprox(object):
                     for j in range(weights[k].shape[0]):
                         text_file.write('{}'.format(weights[k].T[i, j]) + '\n')
                     text_file.write('{}'.format(bias[k].T[i]) + '\n')
+            text_file.write('{}'.format(self.offset) + '\n')
+            text_file.write('{}'.format(self.scalar) + '\n')

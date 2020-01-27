@@ -71,7 +71,8 @@ if __name__ == '__main__':
         with tf.variable_scope('Graph') as scope:
             # define approximator
             ua = univAprox(args.input_dim, args.output_dim,
-                           args.hidden_dim, args.layers, args.activation)
+                           args.hidden_dim, args.layers, args.activation,
+                           scalar=args.ua_scalar, offset=args.ua_offset)
             y = args.ua_scalar * (ua(x) - args.ua_offset)
 
             # define the resulting loss and graph it using tensorboard
