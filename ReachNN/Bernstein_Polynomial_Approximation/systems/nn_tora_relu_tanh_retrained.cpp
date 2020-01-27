@@ -96,7 +96,7 @@ int main()
 	char const *degree_bound = "[1, 1, 1, 1]";
 	char const *activation = "ReLU_tanh";
 	char const *output_index = "0";
-	char const *neural_network = "nn_tora_relu_tanh";
+	char const *neural_network = "nn_tora_relu_tanh_retrained";
 	double err_max = 0;
 
 	time_t start_timer;
@@ -174,7 +174,7 @@ int main()
 	std::string err_max_str = "Max Error: " + std::to_string(err_max);
 	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
 
-	ofstream result_output("./outputs/nn_tora_relu_tanh.txt");
+	ofstream result_output("./outputs/nn_tora_relu_tanh_retrained.txt");
 	if (result_output.is_open())
 	{
 		result_output << reach_result << endl;
@@ -184,7 +184,7 @@ int main()
 
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_tora_relu_tanh", result);
+	plot_setting.plot_2D_interval_GNUPLOT("nn_tora_relu_tanh_retrained", result);
 
 	return 0;
 }

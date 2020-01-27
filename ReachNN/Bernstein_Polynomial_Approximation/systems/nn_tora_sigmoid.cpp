@@ -153,11 +153,11 @@ int main()
 	reach_result = "Verification result: Unknown(7)";
 	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
 
-	if(end_box[0].inf() >= -0.1 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= -0.9 && end_box[1].sup() <= -0.6){
+	if(end_box[0].inf() >= -0.1 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= -0.91 && end_box[1].sup() <= -0.6){
 		reach_result = "Verification result: Yes(7)";
 	}
 
-	if(end_box[0].inf() >= -0.1 || end_box[0].sup() <= 0.2 || end_box[1].inf() >= -0.9 || end_box[1].sup() <= -0.6){
+	if(end_box[0].inf() < -0.1 || end_box[0].sup() > 0.2 || end_box[1].inf() < -0.91 || end_box[1].sup() > -0.6){
 		reach_result = "Verification result: No(7)";
 	}
 

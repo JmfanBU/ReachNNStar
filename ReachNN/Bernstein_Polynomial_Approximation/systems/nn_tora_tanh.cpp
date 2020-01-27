@@ -39,7 +39,9 @@ int main()
 
 
 
+	
 	// Specify the parameters for reachability computation.
+	
 	Computational_Setting setting;
 
 	unsigned int order = 5;
@@ -63,6 +65,7 @@ int main()
 	Interval I(-0.01, 0.01);
 	vector<Interval> remainder_estimation(numVars, I);
 	setting.setRemainderEstimation(remainder_estimation);
+
 	setting.printOff();
 
 	setting.prepare();
@@ -99,6 +102,7 @@ int main()
 	char const *activation = "tanh";
 	char const *output_index = "0";
 	char const *neural_network = "nn_tora_tanh";
+//
 	double err_max = 0;
 
 	time_t start_timer;
@@ -134,7 +138,6 @@ int main()
 
 		dynamics.reach(result, setting, initial_set, unsafeSet);
 
-
 		if(result.status == COMPLETED_SAFE || result.status == COMPLETED_UNSAFE || result.status == COMPLETED_UNKNOWN)
 		{
 			initial_set = result.fp_end_of_time;
@@ -148,11 +151,13 @@ int main()
 	vector<Interval> end_box;
 	string reach_result;
 	reach_result = "Verification result: Unknown(7)";
-	if(end_box[0].inf() >= -0.1 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= -0.9 && end_box[1].sup() <= -0.6){
+	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
+
+	if(end_box[0].inf() >= -0.1 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= -0.91 && end_box[1].sup() <= -0.6){
 		reach_result = "Verification result: Yes(7)";
 	}
 
-	if(end_box[0].inf() >= -0.1 || end_box[0].sup() <= 0.2 || end_box[1].inf() >= -0.9 || end_box[1].sup() <= -0.6){
+	if(end_box[0].inf() < -0.1 || end_box[0].sup() > 0.2 || end_box[1].inf() < -0.91 || end_box[1].sup() > -0.6){
 		reach_result = "Verification result: No(7)";
 	}
 
@@ -181,11 +186,12 @@ int main()
 		result_output << reach_result << endl;
 		result_output << err_max_str << endl;
 		result_output << running_time << endl;
+
 	}
 
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_MATLAB("nn_tora_tanh", result);
+	plot_setting.plot_2D_interval_GNUPLOT("nn_tora_tanh", result);
 
 	return 0;
 }
