@@ -80,7 +80,6 @@ int main()
 	// translate the initial set to a flowpipe
 	Flowpipe initial_set(X0);
 
-	// no unsafe set
 	vector<Constraint> unsafeSet;
 	Constraint constraint_unsafe_1("x0 - 0.8");
 	Constraint constraint_unsafe_2("-x0 + 0.2");
@@ -92,10 +91,10 @@ int main()
 	unsafeSet.push_back(constraint_unsafe_4);
 
 	vector<Constraint> targetSet;
-	Constraint constraint_target_1("x0 - 0.2");
-	Constraint constraint_target_2("-x0");
-	Constraint constraint_target_3("x1 - 0.3");
-	Constraint constraint_target_4("-x1 + 0.05");
+	Constraint constraint_target_1("x0 + 0.2");
+	Constraint constraint_target_2("x0");
+	Constraint constraint_target_3("-x1 + 0.3");
+	Constraint constraint_target_4("x1 - 0.05");
 	targetSet.push_back(constraint_target_1);
 	targetSet.push_back(constraint_target_2);
 	targetSet.push_back(constraint_target_3);
@@ -122,8 +121,8 @@ int main()
 	reach_avoid_result = "Unknown";
 	time(&start_timer);
 
-	// perform 5 control steps
-	for (int iter = 0; iter < 5; ++iter)
+	// perform 35 control steps
+	for (int iter = 0; iter < 35; ++iter)
 	{
 		vector<Interval> box;
 		initial_set.intEval(box, order, setting.tm_setting.cutoff_threshold);
@@ -161,12 +160,11 @@ int main()
 				break;
 			}
 			if (result.status == SAFE_REACHABLE){
-				reach_avoid_result = "Safe and reachable!";
-				break;
+				reach_avoid_result = "Skip";
 			}
 		}
 
-		if (result.status == COMPLETED_SAFE || result.status == COMPLETED_UNSAFE || result.status == COMPLETED_UNKNOWN)
+		if (result.status == COMPLETED_SAFE || result.status == COMPLETED_UNSAFE || result.status == COMPLETED_UNKNOWN || result.status == SAFE_REACHABLE)
 		{
 			initial_set = result.fp_end_of_time;
 		}
@@ -175,6 +173,17 @@ int main()
 			printf("Terminated due to too large overestimation.\n");
 			break;
 		}
+	}
+
+	vector<Interval> end_box;
+	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
+
+	if(end_box[0].inf() >= 0.0 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= 0.05 && end_box[1].sup() <= 0.3){
+		reach_avoid_result = "Safe and reachable!";
+	}
+
+	if(end_box[0].inf() > 0.2 || end_box[0].sup() < 0.0 || end_box[1].inf() > 0.3 || end_box[1].sup() < 0.05){
+		reach_avoid_result = "Verification result: No(35)";
 	}
 
 	time(&end_timer);

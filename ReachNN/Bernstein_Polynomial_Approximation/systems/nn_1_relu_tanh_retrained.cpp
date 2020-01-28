@@ -92,8 +92,8 @@ int main()
 	unsafeSet.push_back(constraint_unsafe_4);
 
 	vector<Constraint> targetSet;
-	Constraint constraint_target_1("x0 - 0.2");
-	Constraint constraint_target_2("-x0");
+	Constraint constraint_target_1("x0 + 0.2");
+	Constraint constraint_target_2("x0");
 	Constraint constraint_target_3("x1 - 0.3");
 	Constraint constraint_target_4("-x1 + 0.05");
 	targetSet.push_back(constraint_target_1);
@@ -176,6 +176,16 @@ int main()
 		}
 	}
 
+	vector<Interval> end_box;
+	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
+
+	if(end_box[0].inf() >= 0.0 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= 0.05 && end_box[1].sup() <= 0.3){
+		reach_avoid_result = "Safe and reachable!";
+	}
+
+	if(end_box[0].inf() > 0.2 || end_box[0].sup() < 0.0 || end_box[1].inf() > 0.3 || end_box[1].sup() < 0.05){
+		reach_avoid_result = "Verification result: No(35)";
+	}
 
 	time(&end_timer);
 	seconds = difftime(start_timer, end_timer);
