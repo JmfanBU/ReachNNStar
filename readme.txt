@@ -138,9 +138,9 @@ cd ../../
 
 ```
 
-### Checking Result
+#### Checking Result
 
-All results will be stored in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
+All results will be stored in ~/ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
 
 Check the result with NETWORK_FILENAME_RETRAINED
 
@@ -154,7 +154,20 @@ gnuplot NETWORK_FILENAME_RETRAINED.plt
 
 ```
 
-Check the figures in outputs/images
+Check the figures in outputs/images/
+
+## Reproduce the result in Example Usage
+```
+cd ~/ReachNNStar/VF_retraining
+
+# If there is less than 8 GB memory, please run the following command
+./example_usage_limited_memory.sh
+
+# If there is at least 8GB memory, please run the following command
+./example_usage.sh
+```
+
+The results will be reported in ~/ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/ with filename nn_1_relu_tanh_origin.txt and nn_1_relu_tanh_retrained.txt. The plotted flowpipes are shown in ~/ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/images/ with filename filename nn_1_relu_tanh_origin.eps and nn_1_relu_tanh_retrained.eps.
 
 ## Contributors
 [Jiameng Fan](https://www.jiamengf.com), [Chao Huang](https://chaohuang2018.github.io/main/), [Wenchao Li](http://sites.bu.edu/depend/people/), [Xin Chen](https://udayton.edu/directory/artssciences/computerscience/chen-xin.php), [Qi Zhu](http://users.eecs.northwestern.edu/~qzhu/)
