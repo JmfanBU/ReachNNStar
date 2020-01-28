@@ -75,7 +75,7 @@ Our tool does not include the installation of Sherlock and Verisig for compariso
     <img src="figures/result_table.png" alt>
 </p>
 <p align="center">
-    <em>Table 1: Comparison with ReachN</em>
+    <em>Table 1: Comparison with ReachNN</em>
 </p>
 
 ## Runing Examples
