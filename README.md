@@ -23,6 +23,8 @@ We have tested our code with memory size 3072 MB.
 
 ## Installation
 
+Please skip this step if you are using our tool in the provided VM.
+
 #### System Requirements
 Ubuntu 18.04, Python 3.6
 
@@ -56,7 +58,7 @@ pip install -r requirements.txt # Run this command under the repository's root d
 
 ```
 
-## Runing Example
+## Runing Examples
 
 NOTE: All the capitalized word is the input argument and have no suffix.
 
@@ -70,101 +72,110 @@ source ~/venv/bin/activate
 
 ### Reachability Analysis for NNCS
 
-#### This will replicate the experiments results from #1 to #5.
+#### This will replicate the experiments results from #1 to #6.
+
+For example #1 to #5, the program will require at least 3GB RAM memory to run.
+
+For example #6, the program will require at least 8GB RAM memory to run.
 
 ```
 
 cd ReachNN
 
+# example 1 to 5
 ./run_exp.sh
 
-```
-
-The results will return to ReachNNTool/ReachNN/outputs. To check the results, run the following code
-
-```
-
-vim FILENAME.txt
-
-gnuplot FILENAME.plt
-
-cd images
+# example 6; note that this program requires at least 8 GB RAM memory to run.
+./run_tora.sh
 
 ```
 
-The ploted result will be in images folder with the same filename as the example.
+The verification results will return to ReachNNTool/ReachNN/outputs/SYSTEM.txt. The computed flowpipes will be plotted to ReachNNTool/ReachNN/outputs/image/SYSTEM.eps.
 
 #### Run individual results
 Please refer to the template in run_exp.sh
 
-The NN description file is in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/nn
+The neural network description file is in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/nn/
 
-The cpp file should be saved in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/systems
+The cpp file that model the system are in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/systems/
 
 ```
 
-./example.sh FILENAME ERROR_BOUND # FILENAME is the example's cpp filename; ERROR_BOUND depends on the system's sensitivity
+./example.sh SYSTEM ERROR_BOUND # SYSTEM is the example's cpp filename and network filename; ERROR_BOUND depends on the system's sensitivity
 
 ```
 
 ### Verification-Aware Knowledge Distillation
 
-#### This will replicate the running example
+#### This will replicate the after KD result in example #1, #2 and #6.
+
+In this section, the new network will be trained given the original network in example #1, #2 and #6. Then. the new networks are fed to reachability analysis module to obtain the new verification results.
+
+For example #1 to #5, the program will require at least 3GB RAM memory to run.
+
+For example #6, the program will require at least 8GB RAM memory to run.
 ```
 
 cd VF_Retraining
 
+# example 1 and 2
+./run_distillation_limited_memory.sh
+
+# example 1, 2 and 6
 ./run_distillation.sh
 
 ```
-Please check the result in ReachNNTool/ReachNN/outputs/nn_13_relu_tanh_*
+Please check the result in ReachNNStar/ReachNN/outputs/*_retrained.txt and ReachNNStar/ReachNN/outputs/images/*_retrained.eps.
 
-The one with origin as suffix is the result of original NN.
-
-The one with 1 as suffix is the result of the distilled NN.
+The one without the "retrained" suffix is the result of original network.
 
 #### Run Individual Task
 ```
 
 cd VF_Retraining
 
-cp NNFILE nn
+# put the original network NETWORK_FILENAME in folder nn/
+cp NETWORK_FILENAME nn/
 
-./example.sh NN_FILENAME NN_NEW_FILENAME L_TARGET REGRESSION_ERROR_BOUND
+# run KD to distill a new network
+./example.sh NETWORK_FILENAME NETWORK_FILENAME_RETRAINED ACTIVATION L_TARGET REGRESSION_ERROR_BOUND SCALAR OFFSET
 
 ```
 
-The NN_NEW_FILENAME will be shown in nn_retrained. You should also add the offset and scalar at the last two lines in NN_NEW_FILENAME, which should be the same as the last two lines in NN_FILENAME.
+The NETWORK_NEW_FILENAME will be shown in folder nn_retrained/. You should also add the offset and scalar at the last two lines in NETWORK_FILENAME_RETRAINED, which should be the same as the last two lines in NN_FILENAME.
 
 After distillation, to rerun the reachability analysis on the new NN, execute the following commands:
 
 ```
+# put the new network into reachability analysis module
+cp nn_retrained/NETWORK_FILENAME_RETRAINED ../ReachNN/Bernstein_Polynomial_Approximation/nn/
 
-cp nn_retrained/NN_NEW_FILENAME ../ReachNN/Bernstein_Polynomial_Approximation/nn
-
+# create a new system file to redo reachability analysis
 cd ../ReachNN/Bernstein_Polynomial_Approximation/systems
 
-cp NN_FILENAME.cpp NN_NEW_FILENAME.cpp
+cp NETWORK_FILENAME.cpp NETWORK_FILENAME_RETRAINED.cpp
 
-vim NN_NEW_FILENAME.cpp # change the network name to NN_NEW_FILENAME in the cpp file and change the output file name to NN_NEW_FILENAME too.
+vim NETWORK_FILENAME_RETRAINED.cpp # change the network name to NETWORK_FILENAME_RETRAINED in the cpp file and change the output file name to NETWORK_FILENAME_RETRAINED too.
 
 cd ../../
 
-./example.sh NN_NEW_FILENAME ERROR_BOUND
+./example.sh NETWORK_FILENAME_RETRAINED ERROR_BOUND
 
 ```
 
 ### Checking Result
 
-All results will be stored in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/outputs
+All results will be stored in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
 
-Check the result with FILENAME
+Check the result with NETWORK_FILENAME_RETRAINED
 
 ```
 
-vim FILENAME.txt
+# verification result
+vim NETWORK_FILENAME_RETRAINED.txt
 
-gnuplot FILENAME.plt
+# plotted flowpipes
+gnuplot NETWORK_FILENAME_RETRAINED.plt
 
 ```
 
