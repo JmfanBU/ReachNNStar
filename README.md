@@ -21,7 +21,7 @@ import the .ova file using Oracle VM Virtual Box.
 
 We have tested our code with RAM memory size 3072 MB. The tool is stored in folder ~/ReachNNStar.
 
-In the home directory, credential.txt includes the information about account and passcode. readme.txt contains the instruction to test our tool. how_to_share_with_desktop.txt is the instruction about file sharing between virtual machine and your desktop.
+In the home directory, credentials.txt includes the information about user name and password. readme.txt contains the instruction to test our tool. howto_vbox_shared_folder.txt is the instruction about file sharing between virtual machine and your desktop.
 
 We note that since VM does not support GPU usage and have limited RAM memory, the runtime result could be different from what we report.
 
