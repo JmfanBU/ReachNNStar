@@ -1,7 +1,7 @@
 # Example 1 KD tanh
 ./example.sh nn_1_tanh nn_1_tanh_retrained TANH 0 4e-1 4 0 &&\
 # Example 2 KD tanh
-./example.sh nn_2_tanh nn_2_tanh_retrained TANH 0 3e-1 4 0 &&\
+./example.sh nn_2_tanh nn_2_tanh_retrained TANH 0 2e-1 4 0 &&\
 
 # copy networks to reachability analysis module and rerun rechability analysis
 cp nn_retrained/* ../ReachNN/Bernstein_Polynomial_Approximation/nn/ &&\
