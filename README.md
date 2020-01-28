@@ -164,7 +164,7 @@ cp NETWORK_FILENAME nn/
 
 ```
 
-The NETWORK_NEW_FILENAME will be shown in folder nn_retrained/. You should also add the offset and scalar at the last two lines in NETWORK_FILENAME_RETRAINED, which should be the same as the last two lines in NN_FILENAME.
+The NETWORK_NEW_FILENAME will be shown in folder nn_retrained/.
 
 After distillation, to rerun the reachability analysis on the new NN, execute the following commands:
 
