@@ -59,6 +59,9 @@ pip install -r requirements.txt # Run this command under the repository's root d
 ```
 
 ## Comparison between ReachNN* and ReachNN[1]
+
+Our tool does not include the installation of Sherlock and Verisig for comparison. For the comparison with Verisig and Sherlock results, please refer to the results in ReachNN[1].
+
 <p align="center">
     <img src="figures/KD.png" alt> 
     <em>Figure 1: Reachability analysis results: Red lines represent boundaries of the obstacles and form the avoid set. Green rectangle represents the target region. Blue rectangle represents the computed flowpipes.</em>
