@@ -60,13 +60,15 @@ pip install -r requirements.txt # Run this command under the repository's root d
 
 ## Comparison between ReachNN* and ReachNN[1]
 <p align="center">
-<figure>
-    <img src="figures/KD.png"> <figcaption>Figure 1: Reachability analysis results for example 1: Red lines represent boundaries of the obstacles and form the avoid set. Green rectangle represents the target region. Blue rectangle represents the computed flowpipes.</figcaption>
-</figure>
+    <img src="figures/KD.png" alt> 
+    <em>Figure 1: Reachability analysis results for example 1: Red lines represent boundaries of the obstacles and form the avoid set. Green rectangle represents the target region. Blue rectangle represents the computed flowpipes.</em>
+</p>
 
-<figure>
-    <img src="figures/result_table.png"> <figcaption>Table 1: Comparison with ReachN</figcaption>
-</figure>
+<p align="center">
+    <img src="figures/result_table.png" alt>
+</p>
+<p align="center">
+    <em>Table 1: Comparison with ReachN</em>
 </p>
 
 ## Runing Examples
