@@ -19,7 +19,7 @@ ReachNN* can be tested in [Virtual
 Machine](https://drive.google.com/file/d/1PzHcbV8QnmqksN180BWLgcH04wQB_Tf9/view?usp=sharing), please download it and
 import the .ova file using Oracle VM Virtual Box.
 
-We have tested our code with RAM memory size 3072 MB.
+We have tested our code with RAM memory size 3072 MB. In the home directory, credential.txt includes the information about account and passcode. readme.txt contains the instruction to test our tool. how_to_share_with_desktop.txt is the instruction about file sharing between virtual machine and your desktop.
 
 We note that since VM does not support GPU usage and have limited RAM memory, the runtime result could be different from what we report.
 
