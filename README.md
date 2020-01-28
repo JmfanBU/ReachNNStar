@@ -85,23 +85,27 @@ cd ReachNN
 # example 1 to 5
 ./run_exp.sh
 
-# example 6; note that this program requires at least 8 GB RAM memory to run.
+# example 6
+# note that this program requires at least 8 GB RAM memory to run.
 ./run_tora.sh
 
 ```
 
-The verification results will return to ReachNNTool/ReachNN/outputs/SYSTEM.txt. The computed flowpipes will be plotted to ReachNNTool/ReachNN/outputs/image/SYSTEM.eps.
+The verification results will return to ReachNNStar/ReachNN/outputs/SYSTEM.txt.
+
+The computed flowpipes will be plotted to ReachNNStar/ReachNN/outputs/image/SYSTEM.eps.
 
 #### Run individual results
 Please refer to the template in run_exp.sh
 
-The neural network description file is in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/nn/
+The neural network description file is in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/nn/
 
-The cpp file that model the system are in ReachNNTool/ReachNN/Bernstein_Polynomial_Approximation/systems/
+The cpp file that model the system are in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/systems/
 
 ```
 
-./example.sh SYSTEM ERROR_BOUND # SYSTEM is the example's cpp filename and network filename; ERROR_BOUND depends on the system's sensitivity
+# SYSTEM is the example's cpp filename and network filename; ERROR_BOUND depends on the system's sensitivity
+./example.sh SYSTEM ERROR_BOUND
 
 ```
 
