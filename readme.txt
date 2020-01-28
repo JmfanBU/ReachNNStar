@@ -19,9 +19,11 @@ ReachNN* can be tested in [Virtual
 Machine](https://drive.google.com/file/d/1PzHcbV8QnmqksN180BWLgcH04wQB_Tf9/view?usp=sharing), please download it and
 import the .ova file using Oracle VM Virtual Box.
 
-We have tested our code with RAM memory size 3072 MB.
+We have tested our code with RAM memory size 3072 MB. The tool is stored in folder ~/ReachNNStar.
 
-We note that since VM does not support GPU usage and have limited RAM memory, the runtime result could be different from what we report.
+In the home directory, credentials.txt includes the information about user name and password. readme.txt contains the instruction to test our tool. howto_vbox_shared_folder.txt is the instruction about file sharing between virtual machine and your desktop.
+
+We note that since VM does not support GPU usage and have limited RAM memory, the runtime result could be different from what we report. Our tool does not include the installation of Sherlock and Verisig for comparison. For the comparison with Verisig and Sherlock results, please refer to the results in ReachNN[1].
 
 ## System Requirements
 Ubuntu 18.04, Python 3.6
