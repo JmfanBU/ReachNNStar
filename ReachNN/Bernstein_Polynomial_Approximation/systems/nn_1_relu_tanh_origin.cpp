@@ -82,7 +82,7 @@ int main()
 
 	vector<Constraint> unsafeSet;
 	Constraint constraint_unsafe_1("x0 - 0.8");
-	Constraint constraint_unsafe_2("-x0 + 0.2");
+	Constraint constraint_unsafe_2("-x0 + 0.3");
 	Constraint constraint_unsafe_3("x1 - 0.4");
 	Constraint constraint_unsafe_4("-x1 - 0.1");
 	unsafeSet.push_back(constraint_unsafe_1);
@@ -91,8 +91,8 @@ int main()
 	unsafeSet.push_back(constraint_unsafe_4);
 
 	vector<Constraint> targetSet;
-	Constraint constraint_target_1("x0 + 0.2");
-	Constraint constraint_target_2("x0");
+	Constraint constraint_target_1("x0 - 0.2");
+	Constraint constraint_target_2("-x0");
 	Constraint constraint_target_3("-x1 + 0.3");
 	Constraint constraint_target_4("x1 - 0.05");
 	targetSet.push_back(constraint_target_1);
@@ -158,9 +158,6 @@ int main()
 			if (result.status == UNKNOWN_REACHABLE){
 				reach_avoid_result = "Reach without safety guarantees.";
 				break;
-			}
-			if (result.status == SAFE_REACHABLE){
-				reach_avoid_result = "Skip";
 			}
 		}
 
