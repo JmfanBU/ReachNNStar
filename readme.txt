@@ -100,7 +100,7 @@ cd ~/ReachNNStar/VF_Retraining
 ./run_distillation.sh
 
 ```
-Please check the result in ~/ReachNNStar/ReachNN/outputs/*_retrained.txt and ReachNNStar/ReachNN/outputs/images/*_retrained.eps.
+Please check the result in ~/ReachNNStar/ReachNN/outputs/*_retrained.txt and ~/ReachNNStar/ReachNN/outputs/images/*_retrained.eps.
 
 The one without the "retrained" suffix is the result of original network.
 
