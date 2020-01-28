@@ -230,7 +230,7 @@ def bernstein_error_partition_cuda(
             all_sample_points = hdf5_store['all_sample_points'][:]
             all_shift_points = hdf5_store['all_shift_points'][:]
 
-    if filename[:4] == 'nn_5' or filename == 'nn_2_sigmoid':
+    if filename[:4] == 'nn_5' or filename[:4] == 'nn_2':
         batch_size = 1e5
     else:
         batch_size = 1e7
