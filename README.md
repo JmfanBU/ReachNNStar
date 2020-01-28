@@ -58,6 +58,12 @@ pip install -r requirements.txt # Run this command under the repository's root d
 
 ```
 
+## Comparison between ReachNN* and ReachNN[1]
+
+<figure>
+    <img src="figures/result_table.pdf"> <figcaption>Table 1: Comparison with ReachN</figcaption>
+</figure>
+
 ## Runing Examples
 
 NOTE: All the capitalized word is the input argument and have no suffix.
@@ -189,11 +195,11 @@ Check the figures in outputs/images
 [Jiameng Fan](https://www.jiamengf.com), [Chao Huang](https://chaohuang2018.github.io/main/), [Wenchao Li](http://sites.bu.edu/depend/people/), [Xin Chen](https://udayton.edu/directory/artssciences/computerscience/chen-xin.php), [Qi Zhu](http://users.eecs.northwestern.edu/~qzhu/)
 
 ## References
-C.Huang, J.Fan, W.Li, X.Chen, and Q.Zhu.
+[1] C.Huang, J.Fan, W.Li, X.Chen, and Q.Zhu.
 [Reachnn: Reachabilityanalysisofneural-network controlled systems](https://dl.acm.org/citation.cfm?id=3358228).
 ACM Transactions on Embedded Computing Systems, 18:1–22, 10 2019. doi: 10.1145/3358228.
 
-J.Fan, C.Huang, W.Li, X.Chen, and Q.Zhu.
+[2] J.Fan, C.Huang, W.Li, X.Chen, and Q.Zhu.
 [Towards Verification-Aware Knowledge Distillation for Neural-Network Controlled Systems](https://ieeexplore.ieee.org/abstract/document/8942059).
 International Conference on Computer Aided Design (ICCAD), November 2019.
 
