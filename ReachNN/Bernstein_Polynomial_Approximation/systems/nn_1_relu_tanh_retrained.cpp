@@ -82,24 +82,24 @@ int main()
 
 	// no unsafe set
 	vector<Constraint> unsafeSet;
-    Constraint constraint_unsafe_1("x0 - 0.8");
-    Constraint constraint_unsafe_2("-x0 + 0.2");
-    Constraint constraint_unsafe_3("x1 - 0.4");
-    Constraint constraint_unsafe_4("-x1 - 0.1");
-    unsafeSet.push_back(constraint_unsafe_1);
-    unsafeSet.push_back(constraint_unsafe_2);
-    unsafeSet.push_back(constraint_unsafe_3);
-    unsafeSet.push_back(constraint_unsafe_4);
+	Constraint constraint_unsafe_1("x0 - 0.8");
+	Constraint constraint_unsafe_2("-x0 + 0.2");
+	Constraint constraint_unsafe_3("x1 - 0.4");
+	Constraint constraint_unsafe_4("-x1 - 0.1");
+	unsafeSet.push_back(constraint_unsafe_1);
+	unsafeSet.push_back(constraint_unsafe_2);
+	unsafeSet.push_back(constraint_unsafe_3);
+	unsafeSet.push_back(constraint_unsafe_4);
 
 	vector<Constraint> targetSet;
-    Constraint constraint_target_1("x0 - 0.2");
-    Constraint constraint_target_2("-x0");
-    Constraint constraint_target_3("x1 - 0.3");
-    Constraint constraint_target_4("-x1 + 0.05");
-    targetSet.push_back(constraint_target_1);
-    targetSet.push_back(constraint_target_2);
-    targetSet.push_back(constraint_target_3);
-    targetSet.push_back(constraint_target_4);
+	Constraint constraint_target_1("x0 - 0.2");
+	Constraint constraint_target_2("-x0");
+	Constraint constraint_target_3("x1 - 0.3");
+	Constraint constraint_target_4("-x1 + 0.05");
+	targetSet.push_back(constraint_target_1);
+	targetSet.push_back(constraint_target_2);
+	targetSet.push_back(constraint_target_3);
+	targetSet.push_back(constraint_target_4);
 
 	// result of the reachability computation
 	Result_of_Reachability result;
@@ -112,14 +112,14 @@ int main()
 	char const *degree_bound = "[3, 3]";
 	char const *activation = "ReLU_tanh";
 	char const *output_index = "0";
-	char const *neural_network = "nn_13_relu_tanh_1";
+	char const *neural_network = "nn_1_relu_tanh_retrained";
 
 	double err_max = 0;
 	time_t start_timer;
 	time_t end_timer;
 	double seconds;
-    string reach_avoid_result;
-    reach_avoid_result = "Unknown";
+	string reach_avoid_result;
+	reach_avoid_result = "Unknown";
 	time(&start_timer);
 
 	// perform 35 control steps
@@ -151,20 +151,20 @@ int main()
 
 		dynamics.reach_while_avoid(result, setting, initial_set, unsafeSet, targetSet);
 
-        if (result.status == COMPLETED_UNSAFE || result.status == SAFE_REACHABLE || result.status == UNKNOWN_REACHABLE){
-            if (result.status == COMPLETED_UNSAFE){
-                reach_avoid_result = "Hitting the obstacles!";
-                break;
-            }
-            if (result.status == UNKNOWN_REACHABLE){
-                reach_avoid_result = "Reach without safety guarantees.";
-                break;
-            }
-            if (result.status == SAFE_REACHABLE){
-                reach_avoid_result = "Safe and reachable!";
-                break;
-            }
-        }
+		if (result.status == COMPLETED_UNSAFE || result.status == SAFE_REACHABLE || result.status == UNKNOWN_REACHABLE){
+			if (result.status == COMPLETED_UNSAFE){
+				reach_avoid_result = "Hitting the obstacles!";
+				break;
+			}
+			if (result.status == UNKNOWN_REACHABLE){
+				reach_avoid_result = "Reach without safety guarantees.";
+				break;
+			}
+			if (result.status == SAFE_REACHABLE){
+				reach_avoid_result = "Safe and reachable!";
+				break;
+			}
+		}
 
 		if (result.status == COMPLETED_SAFE || result.status == COMPLETED_UNSAFE || result.status == COMPLETED_UNKNOWN)
 		{
@@ -193,16 +193,19 @@ int main()
 		exit(1);
 	}
 
-	ofstream result_output("./outputs/nn_13_relu_tanh_1.txt");
+	std::string err_max_str = "Max Error: " + std::to_string(err_max);
+	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
+
+	ofstream result_output("./outputs/nn_1_relu_tanh_retrained.txt");
 	if (result_output.is_open())
 	{
-        result_output << reach_avoid_result << endl;
-		result_output << err_max << endl;
-		result_output << -seconds << endl;
+		result_output << reach_avoid_result << endl;
+		result_output << err_max_str << endl;
+		result_output << running_time << endl;
 	}
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_13_relu_tanh_1", result);
+	plot_setting.plot_2D_interval_GNUPLOT("nn_1_relu_tanh_retrained", result);
 
 	return 0;
 }
