@@ -21,6 +21,8 @@ import the .ova file using Oracle VM Virtual Box.
 
 We have tested our code with memory size 3072 MB.
 
+We note that since VM does not support GPU usage and have limited RAM memory, the runtime result could be different from what we report.
+
 ## Installation
 
 Please skip this step if you are using our tool in the provided VM.
