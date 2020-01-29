@@ -63,7 +63,7 @@ cd ~/ReachNNStar/ReachNN
 
 The verification results will return to ~/ReachNNStar/ReachNN/outputs/SYSTEM.txt.
 
-The computed flowpipes will be plotted to ~/ReachNNStar/ReachNN/outputs/image/SYSTEM.eps.
+The computed flowpipes will be plotted to ~/ReachNNStar/ReachNN/outputs/image/SYSTEM.eps after the program is finished.
 
 #### Run individual results
 
