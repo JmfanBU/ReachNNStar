@@ -115,7 +115,7 @@ The verification results will return to ReachNNStar/ReachNN/outputs/SYSTEM.txt.
 
 The computed flowpipes will be plotted to ReachNNStar/ReachNN/outputs/image/SYSTEM.eps after the program is finished.
 
-#### Run individual results
+#### Run the specified NNCS
 Please refer to the template in run_exp.sh
 
 The neural network description file is in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/nn/
@@ -171,7 +171,7 @@ Please check the result in ReachNNStar/ReachNN/outputs/SYSTEM_retrained.txt and 
 
 The one without the "retrained" suffix is the result of the original network.
 
-#### Run Individual Task
+#### Run the specified NNCS
 ```
 
 cd VF_Retraining
