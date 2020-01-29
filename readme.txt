@@ -35,7 +35,6 @@ NOTE: All the capitalized word is the input argument and have no suffix.
 Please activate the python virtualenv before running any examples
 
 ```
-
 source ~/venv/bin/activate
 
 ```
@@ -49,7 +48,6 @@ For example #1 to #5, the program will require at least 3GB RAM memory to run.
 For example #6, the program will require at least 8GB RAM memory to run. We recommend to run it on desktop instead of VM.
 
 ```
-
 cd ~/ReachNNStar/ReachNN
 
 # example 1 to 5
@@ -76,7 +74,6 @@ The neural network description file is in ~/ReachNNStar/ReachNN/Bernstein_Polyno
 The cpp file that model the system are in ~/ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/systems/
 
 ```
-
 # SYSTEM is the example's cpp filename and network filename; ERROR_BOUND depends on the system's sensitivity
 ./example.sh SYSTEM ERROR_BOUND
 
@@ -89,7 +86,6 @@ All results will be stored in ReachNNStar/ReachNN/Bernstein_Polynomial_Approxima
 Check the result with SYSTEM
 
 ```
-
 # verification result
 vim SYSTEM.txt
 
@@ -106,11 +102,11 @@ Check the figures in outputs/images/
 
 In this section, the new network will be trained given the original network in example #1, #2 and #6. Then. the new networks are fed to reachability analysis module to obtain the new verification results.
 
-For example #1 to #5, the program will require at least 3GB RAM memory to run.
+For example #1 and #2, the program will require at least 3GB RAM memory to run.
 
 For example #6, the program will require at least 8GB RAM memory to run.
-```
 
+```
 cd ~/ReachNNStar/VF_Retraining
 
 # example 1 and 2
@@ -118,15 +114,14 @@ cd ~/ReachNNStar/VF_Retraining
 
 # example 1, 2 and 6
 ./run_distillation.sh
-
 ```
-Please check the result in ~/ReachNNStar/ReachNN/outputs/*_retrained.txt and ~/ReachNNStar/ReachNN/outputs/images/*_retrained.eps.
+
+Please check the result in ~/ReachNNStar/ReachNN/outputs/SYSTEM_retrained.txt and ~/ReachNNStar/ReachNN/outputs/images/SYSTEM_retrained.eps.
 
 The one without the "retrained" suffix is the result of original network.
 
 #### Run Individual Task
 ```
-
 cd ~/ReachNNStar/VF_Retraining
 
 # put the original network NETWORK_FILENAME in folder nn/
@@ -160,12 +155,11 @@ cd ../../
 
 ##### Checking Result
 
-All results will be stored in ~/ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
+All results will be stored in ~/ReachNNStar/ReachNN/outputs/
 
 Check the result with NETWORK_FILENAME_RETRAINED
 
 ```
-
 # verification result
 vim NETWORK_FILENAME_RETRAINED.txt
 
@@ -187,7 +181,7 @@ cd ~/ReachNNStar/VF_retraining
 ./example_usage.sh
 ```
 
-The results will be reported in ~/ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/ with filename nn_1_relu_tanh_origin.txt and nn_1_relu_tanh_retrained.txt. The plotted flowpipes are shown in ~/ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/images/ with filename filename nn_1_relu_tanh_origin.eps and nn_1_relu_tanh_retrained.eps.
+The results will be reported in ~/ReachNNStar/ReachNN/outputs/ with filename nn_1_relu_tanh_origin.txt and nn_1_relu_tanh_retrained.txt. The plotted flowpipes are shown in ~/ReachNNStar/ReachNN/outputs/images/ with filename nn_1_relu_tanh_origin.eps and nn_1_relu_tanh_retrained.eps.
 
 ## Contributors
 [Jiameng Fan](https://www.jiamengf.com), [Chao Huang](https://chaohuang2018.github.io/main/), [Wenchao Li](http://sites.bu.edu/depend/people/), [Xin Chen](https://udayton.edu/directory/artssciences/computerscience/chen-xin.php), [Qi Zhu](http://users.eecs.northwestern.edu/~qzhu/)
@@ -207,4 +201,3 @@ To fix this problem, try to reinstall m4 first
 ```
 sudo apt-get install --reinstall m4
 ```
-
