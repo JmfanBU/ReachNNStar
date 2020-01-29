@@ -115,7 +115,7 @@ cd ReachNN
 
 The verification results will return to ReachNNStar/ReachNN/outputs/SYSTEM.txt.
 
-The computed flowpipes will be plotted to ReachNNStar/ReachNN/outputs/image/SYSTEM.eps.
+The computed flowpipes will be plotted to ReachNNStar/ReachNN/outputs/image/SYSTEM.eps after the program is finished.
 
 #### Run individual results
 Please refer to the template in run_exp.sh
@@ -130,6 +130,24 @@ The cpp file that model the system are in ReachNNStar/ReachNN/Bernstein_Polynomi
 ./example.sh SYSTEM ERROR_BOUND
 
 ```
+
+##### Checking Result
+
+All results will be stored in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
+
+Check the result with SYSTEM
+
+```
+
+# verification result
+vim SYSTEM.txt
+
+# plotted flowpipes
+gnuplot SYSTEM.plt
+
+```
+
+Check the figures in outputs/images/
 
 ### Verification-Aware Knowledge Distillation
 
@@ -189,7 +207,7 @@ cd ../../
 
 ```
 
-#### Checking Result
+##### Checking Result
 
 All results will be stored in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
 
@@ -205,7 +223,7 @@ gnuplot NETWORK_FILENAME_RETRAINED.plt
 
 ```
 
-Check the figures in outputs/images
+Check the figures in outputs/images/
 
 ## Reproduce the result in Figure 1
 ```
