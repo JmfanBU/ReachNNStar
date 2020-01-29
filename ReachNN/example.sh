@@ -5,4 +5,5 @@ cd Bernstein_Polynomial_Approximation &&\
 make name=$NNCS &&\
 python error_analysis.py --filename $NNCS --error_bound $ERROR &&\
 mv outputs/$NNCS* ../outputs/ &&\
-gnuplot ../outputs/*.plt
+cd ../outputs &&\
+gnuplot *.plt
