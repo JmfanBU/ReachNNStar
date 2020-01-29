@@ -14,6 +14,7 @@ dir = os.path.dirname(os.path.realpath(__file__))
 
 
 if __name__ == '__main__':
+    start_time = time.time()
     # we parse the potential arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_dim', default=2, type=int,
@@ -202,6 +203,7 @@ if __name__ == '__main__':
 
         # Finally we save the graph to check that it looks like what we wanted
         saver.save(sess, result_folder + '/data.chkp')
+        print("--- %s seconds ---" % (time.time() - start_time))
 
         # obtain the trained weights and bias
         weights = sess.run(ua.weights)
