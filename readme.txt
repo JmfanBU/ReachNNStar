@@ -82,6 +82,24 @@ The cpp file that model the system are in ~/ReachNNStar/ReachNN/Bernstein_Polyno
 
 ```
 
+##### Checking Result
+
+All results will be stored in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
+
+Check the result with SYSTEM
+
+```
+
+# verification result
+vim SYSTEM.txt
+
+# plotted flowpipes
+gnuplot SYSTEM.plt
+
+```
+
+Check the figures in outputs/images/
+
 ### Verification-Aware Knowledge Distillation
 
 #### This will replicate the after KD result in example #1, #2 and #6.
@@ -140,7 +158,7 @@ cd ../../
 
 ```
 
-#### Checking Result
+##### Checking Result
 
 All results will be stored in ~/ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
 
