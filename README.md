@@ -236,7 +236,7 @@ cd VF_retraining
 ./example_usage.sh
 ```
 
-The results will be reported in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/ with filename nn_1_relu_tanh_origin.txt and nn_1_relu_tanh_retrained.txt. The plotted flowpipes are shown in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/images/ with filename filename nn_1_relu_tanh_origin.eps and nn_1_relu_tanh_retrained.eps.
+The results will be reported in ReachNNStar/ReachNN//outputs/ with filename nn_1_relu_tanh_origin.txt and nn_1_relu_tanh_retrained.txt. The plotted flowpipes are shown in ReachNNStar/ReachNN/outputs/images/ with filename nn_1_relu_tanh_origin.eps and nn_1_relu_tanh_retrained.eps.
 
 ## Contributors
 [Jiameng Fan](https://www.jiamengf.com), [Chao Huang](https://chaohuang2018.github.io/main/), [Wenchao Li](http://sites.bu.edu/depend/people/), [Xin Chen](https://udayton.edu/directory/artssciences/computerscience/chen-xin.php), [Qi Zhu](http://users.eecs.northwestern.edu/~qzhu/)
