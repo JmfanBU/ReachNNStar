@@ -132,7 +132,7 @@ The cpp file that model the system are in ReachNNStar/ReachNN/Bernstein_Polynomi
 
 ##### Checking Result
 
-All results will be stored in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
+All results will be stored in ReachNNStar/ReachNN/outputs/
 
 Check the result of SYSTEM
 
