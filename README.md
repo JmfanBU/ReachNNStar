@@ -155,7 +155,7 @@ Check the figures in outputs/images/
 
 In this section, the new network will be trained given the original network in example #1, #2 and #6. Then. the new networks are fed to reachability analysis module to obtain the new verification results.
 
-For example #1 to #5, the program will require at least 3GB RAM memory to run.
+For example #1 and #2, the program will require at least 3GB RAM memory to run.
 
 For example #6, the program will require at least 8GB RAM memory to run.
 ```
@@ -169,7 +169,7 @@ cd VF_Retraining
 ./run_distillation.sh
 
 ```
-Please check the result in ReachNNStar/ReachNN/outputs/*_retrained.txt and ReachNNStar/ReachNN/outputs/images/*_retrained.eps.
+Please check the result in ReachNNStar/ReachNN/outputs/SYSTEM_retrained.txt and ReachNNStar/ReachNN/outputs/images/SYSTEM_retrained.eps.
 
 The one without the "retrained" suffix is the result of original network.
 
