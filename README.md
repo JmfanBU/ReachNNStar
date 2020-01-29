@@ -2,14 +2,13 @@
 ReachNN* is a reachability analysis approach based on Bernstein
 polynomials that can verify neural-network controlled systems (NNCSs)
 with a more general form of activation functions. We further explore how
-certain property, like Lipschitz constant, of the network influences the
-verification result and propose a new Verification-aware Knowledge
+the specific property, like Lipschitz constant, of the network influences the verification result and propose a new Verification-aware Knowledge
 Distillation method to distill a new neural network controller that is
 more verification-friendly and retain the knowledge from the orignal
-nerual network controller.
+neural network controller.
 
-ReachNN* is a GPU implementation of the original proposed ReachNN tool
-and integrate the function of Verification-aware Knwoledge
+ReachNN* is a GPU implementation of the originally proposed ReachNN tool
+and integrate the function of Verification-aware Knowledge
 Distillation. We achieved at least 7X faster verification running time
 compared to the original ReachNN tool.
 
@@ -19,11 +18,11 @@ ReachNN* can be tested in [Virtual
 Machine](https://drive.google.com/file/d/1phzVgLYzxnS03NiZI0Qbqulo1Fuhu3V4/view?usp=sharing), please download it and
 import the .ova file using Oracle VM Virtual Box.
 
-We have tested our code with RAM memory size 3072 MB. The tool is stored in folder ~/ReachNNStar.
+We have tested our code with RAM size 3072 MB. The tool is stored in folder ~/ReachNNStar.
 
-In the home directory, credentials.txt includes the information about user name and password. readme.pdf contains the instruction to test our tool. howto_vbox_shared_folder.txt is the instruction about file sharing between virtual machine and your desktop. ~/ReachNNStar/checksum_result.txt is for the integrity check.
+In the home directory, credentials.txt includes information about user name and password. readme.pdf contains the instruction to test our tool. howto_vbox_shared_folder.txt is the instruction about file sharing between the virtual machine and your desktop. ~/ReachNNStar/checksum_result.txt is for the integrity check.
 
-We note that since VM does not support GPU usage and have limited RAM memory, the runtime result could be different from what we report.
+We note that since VM does not support GPU usage and has limited RAM memory, the runtime result could be different from what we report.
 
 ## Installation
 
@@ -78,11 +77,11 @@ Our tool does not include the installation of Sherlock and Verisig for compariso
     <em>Table 1: Comparison with ReachNN</em>
 </p>
 
-## Runing Examples
+## Running Examples
 
-NOTE: All the capitalized word is the input argument and have no suffix.
+NOTE: All the capitalized word is the input argument and has no suffix.
 
-Please activate the python virtualenv before running any examples
+Please activate the python virtualenv before running any examples.
 
 ```
 
@@ -90,15 +89,15 @@ source ~/venv/bin/activate
 
 ```
 
-We assume the following commands is running under ReachNNStar/ directory.
+We assume the following commands are running under ReachNNStar/ directory.
 
 ### Reachability Analysis for NNCS
 
 #### This will replicate the experiments results from #1 to #6.
 
-For example #1 to #5, the program will require at least 3GB RAM memory to run.
+For example #1 to #5, the program will require at least 3GB RAM to run.
 
-For example #6, the program will require at least 8GB RAM memory to run.
+For example #6, the program will require at least 8GB RAM to run.
 
 ```
 
@@ -135,7 +134,7 @@ The cpp file that model the system are in ReachNNStar/ReachNN/Bernstein_Polynomi
 
 All results will be stored in ReachNNStar/ReachNN/Bernstein_Polynomial_Approximation/outputs/
 
-Check the result with SYSTEM
+Check the result of SYSTEM
 
 ```
 
@@ -153,11 +152,11 @@ Check the figures in outputs/images/
 
 #### This will replicate the after KD result in example #1, #2 and #6.
 
-In this section, the new network will be trained given the original network in example #1, #2 and #6. Then. the new networks are fed to reachability analysis module to obtain the new verification results.
+In this section, the new network will be trained given the original network in example #1, #2 and #6. Then, the new networks are fed to the reachability analysis module to obtain the new verification results.
 
-For example #1 and #2, the program will require at least 3GB RAM memory to run.
+For example #1 and #2, the program will require at least 3GB RAM to run.
 
-For example #6, the program will require at least 8GB RAM memory to run.
+For example #6, the program will require at least 8GB RAM to run.
 ```
 
 cd VF_Retraining
@@ -171,7 +170,7 @@ cd VF_Retraining
 ```
 Please check the result in ReachNNStar/ReachNN/outputs/SYSTEM_retrained.txt and ReachNNStar/ReachNN/outputs/images/SYSTEM_retrained.eps.
 
-The one without the "retrained" suffix is the result of original network.
+The one without the "retrained" suffix is the result of the original network.
 
 #### Run Individual Task
 ```
@@ -256,4 +255,3 @@ To fix this problem, try to reinstall m4 first
 ```
 sudo apt-get install --reinstall m4
 ```
-
