@@ -9,8 +9,7 @@ neural network controller.
 
 ReachNN* is a GPU implementation of the originally proposed ReachNN tool
 and integrate the function of Verification-aware Knowledge
-Distillation. We achieved at least 7X faster verification running time
-compared to the original ReachNN tool.
+Distillation. Experiment results across a set of benchmarks show 7x to 422x efficiency improvement in terms of runtime
 
 ## Execution on VM
 
