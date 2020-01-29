@@ -19,7 +19,7 @@ def find_files(treeroot):
             for f in files:
                 full_path = os.path.join(dir, f)
                 path_sha1sum = get_sha1sum(full_path)
-                print(path_sha1sum, full_path)
+                print('{}  {}'.format(path_sha1sum, full_path))
                 result_file.write('{}  {}'.format(path_sha1sum, full_path))
                 result_file.write('\n')
 
