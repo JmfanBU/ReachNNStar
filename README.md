@@ -76,6 +76,11 @@ Our tool does not include the installation of Sherlock and Verisig for compariso
     <em>Table 1: Comparison with ReachNN</em>
 </p>
 
+## User Manual
+
+We provide a example usage to illustrate how to define a NNCS and run verification with ReachNN. Details are included in [ReachNNStar_Usage.pdf](https://github.com/JmfanBU/ReachNNStar/blob/master/ReachNNStar_Usage.pdf)
+
+
 ## Running Examples
 
 NOTE: All the capitalized word is the input argument and has no suffix.
@@ -223,7 +228,7 @@ gnuplot NETWORK_FILENAME_RETRAINED.plt
 
 Check the figures in outputs/images/
 
-## Reproduce the result in Figure 1
+## Reproduce the result in Figure 1 in the usage file
 ```
 cd VF_retraining
 
