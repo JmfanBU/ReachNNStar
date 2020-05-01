@@ -247,7 +247,7 @@ The results will be reported in ReachNNStar/ReachNN//outputs/ with filename nn_1
 ## References
 [1] C.Huang, J.Fan, W.Li, X.Chen, and Q.Zhu.
 [ReachNN: Reachability Analysis of Neural-Network Controlled Systems](https://dl.acm.org/citation.cfm?id=3358228).
-ACM Transactions on Embedded Computing Systems, 18:1–22, October 2019.
+ACM Transactions on Embedded Computing Systems (TECS), 18:1–22, October 2019.
 
 [2] J.Fan, C.Huang, W.Li, X.Chen, and Q.Zhu.
 [Towards Verification-Aware Knowledge Distillation for Neural-Network Controlled Systems](https://ieeexplore.ieee.org/abstract/document/8942059).
