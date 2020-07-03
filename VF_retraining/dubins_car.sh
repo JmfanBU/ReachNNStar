@@ -1,0 +1,1 @@
+python approx_dubinscar.py --filename nn_dubinscar_relu_tanh --original_activation RELU_TANH --input_dim 3 --output_dim 1 --max_it 10000 --output_file nn_dubinscar_relu_tanh_retrained --Lipschitz 0 --range 2 --activation RELU_TANH --stepsize 1e-3 --regression_bound 0.05

@@ -10,12 +10,14 @@ using namespace flowstar;
 int main()
 {
 	// Declaration of the state variables.
-	unsigned int numVars = 5;
+	unsigned int numVars = 7;
 
 	int x0_id = stateVars.declareVar("x0");
 	int x1_id = stateVars.declareVar("x1");
 	int x2_id = stateVars.declareVar("x2");
 	int x3_id = stateVars.declareVar("x3");
+	int x4_id = stateVars.declareVar("x4");
+	int x5_id = stateVars.declareVar("x5");
 	int u_id = stateVars.declareVar("u");
 
 	int domainDim = numVars + 1;
@@ -23,9 +25,11 @@ int main()
 
 	// Define the continuous dynamics.
 	Expression_AST<Real> deriv_x0("x1");  // theta_r = 0
-	Expression_AST<Real> deriv_x1("-x0 + 0.1*sin(x2)");  // theta_r = 0
-	Expression_AST<Real> deriv_x2("x3");  // theta_r = 0
-	Expression_AST<Real> deriv_x3("u");  // theta_r = 0
+	Expression_AST<Real> deriv_x1("x2");  // theta_r = 0
+	Expression_AST<Real> deriv_x2("-2*x2 - 4 - 0.0001*x1^2");  // theta_r = 0
+	Expression_AST<Real> deriv_x3("x4");  // theta_r = 0
+	Expression_AST<Real> deriv_x4("x5");  // theta_r = 0
+	Expression_AST<Real> deriv_x5("-2*x5 + 2*u - 0.0001*x4^2");  // theta_r = 0
 	Expression_AST<Real> deriv_u("0");
 
 	vector<Expression_AST<Real> > ode_rhs(numVars);
@@ -33,24 +37,26 @@ int main()
 	ode_rhs[x1_id] = deriv_x1;
 	ode_rhs[x2_id] = deriv_x2;
 	ode_rhs[x3_id] = deriv_x3;
+	ode_rhs[x4_id] = deriv_x4;
+	ode_rhs[x5_id] = deriv_x5;
 	ode_rhs[u_id] = deriv_u;
 
 	Deterministic_Continuous_Dynamics dynamics(ode_rhs);
 
 
 
-	
+
 	// Specify the parameters for reachability computation.
-	
+
 	Computational_Setting setting;
 
-	unsigned int order = 6;
+	unsigned int order = 8;
 
 	// stepsize and order for reachability analysis
 	setting.setFixedStepsize(0.005, order);
 
 	// time horizon for a single control step
-	setting.setTime(0.5);
+	setting.setTime(0.1);
 
 	// cutoff threshold
 	setting.setCutoffThreshold(1e-10);
@@ -74,12 +80,14 @@ int main()
 	 * Initial set can be a box which is represented by a vector of intervals.
 	 * The i-th component denotes the initial set of the i-th state variable.
 	 */
-	Interval init_x0(-0.77,-0.75), init_x1(-0.45,-0.43), init_x2(0.51, 0.54), init_x3(-0.3, -0.28), init_u(0);
+	Interval init_x0(90,110), init_x1(32,32.2), init_x2(0), init_x3(10, 11), init_x4(30, 30.2), init_x5(0), init_u(0);
 	std::vector<Interval> X0;
 	X0.push_back(init_x0);
 	X0.push_back(init_x1);
 	X0.push_back(init_x2);
 	X0.push_back(init_x3);
+	X0.push_back(init_x4);
+	X0.push_back(init_x5);
 	X0.push_back(init_u);
 
 
@@ -97,10 +105,10 @@ int main()
 	char const *function_name1 = "poly_approx_controller";
 	char const *function_name2 = "poly_approx_error";
 	char const *function_name3 = "network_lips";
-	char const *degree_bound = "[1, 1, 1, 1]";
+	char const *degree_bound = "[1, 1, 1, 1, 1, 1]";
 	char const *activation = "ReLU";
 	char const *output_index = "0";
-	char const *neural_network = "nn_tora_relu";
+	char const *neural_network = "ACC_KD";
 	double err_max = 0;
 
 	time_t start_timer;
@@ -114,7 +122,7 @@ int main()
 		vector<Interval> box;
 		initial_set.intEval(box, order, setting.tm_setting.cutoff_threshold);
 
-		string strBox = "[" + box[0].toString() + "," + box[1].toString() + "," + box[2].toString() + "," + box[3].toString() + "]";
+		string strBox = "[" + box[0].toString() + "," + box[1].toString() + "," + box[2].toString() + "," + box[3].toString() + "," + box[4].toString() + "," + box[5].toString() + "]";
 
 		string strExpU = bernsteinPolyApproximation(module_name, function_name1, degree_bound, strBox.c_str(), activation, output_index, neural_network);
 		double err = stod(bernsteinPolyApproximation(module_name, function_name2, degree_bound, strBox.c_str(), activation, output_index, neural_network));
@@ -151,11 +159,11 @@ int main()
 	reach_result = "Verification result: Unknown(10)";
 	result.fp_end_of_time.intEval(end_box, order, setting.tm_setting.cutoff_threshold);
 
-	if(end_box[0].inf() >= -0.1 && end_box[0].sup() <= 0.2 && end_box[1].inf() >= -0.91 && end_box[1].sup() <= -0.6){
+	if(end_box[0].inf() - end_box[3].sup() >= 10 + 1.4 * end_box[4].sup()){
 		reach_result = "Verification result: Yes(10)";
 	}
-
-	if(end_box[0].inf() < -0.1 || end_box[0].sup() > 0.2 || end_box[1].inf() < -0.9 || end_box[1].sup() > -0.6){
+    else
+    {
 		reach_result = "Verification result: No(10)";
 	}
 
@@ -178,7 +186,7 @@ int main()
 	std::string err_max_str = "Max Error: " + std::to_string(err_max);
 	std::string running_time = "Running Time: " + std::to_string(-seconds) + " seconds";
 
-	ofstream result_output("./outputs/nn_tora_relu.txt");
+	ofstream result_output("./outputs/ACC.txt");
 	if (result_output.is_open())
 	{
 		result_output << reach_result << endl;
@@ -188,7 +196,7 @@ int main()
 
 	// you need to create a subdir named outputs
 	// the file name is example.m and it is put in the subdir outputs
-	plot_setting.plot_2D_interval_GNUPLOT("nn_tora_relu", result);
+	plot_setting.plot_2D_interval_GNUPLOT("ACC", result);
 
 	return 0;
 }

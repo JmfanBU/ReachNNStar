@@ -164,6 +164,7 @@ def bernstein_error_partition_cuda(
     print('Lipschitz constant: {}'.format(lips))
 
     all_comb_lists = sample_points_list(partition, input_dim)
+    print(all_comb_lists)
 
     if isinstance(lips, np.ndarray):
         lips = lips[0]
@@ -419,6 +420,19 @@ def degree_comb_lists(d, m):
         X, Y, Z, H = np.meshgrid(x, y, z, h)
         grid = np.vstack((X.flatten(), Y.flatten(), Z.flatten(), H.flatten()))
         return grid.T
+    if m == 6:
+        x = np.arange(d[0] + 1)
+        y = np.arange(d[1] + 1)
+        z = np.arange(d[2] + 1)
+        h = np.arange(d[3] + 1)
+        j = np.arange(d[4] + 1)
+        k = np.arange(d[5] + 1)
+        X, Y, Z, H, J, K = np.meshgrid(x, y, z, h, j, k)
+        grid = np.vstack((
+            X.flatten(), Y.flatten(), Z.flatten(),
+            H.flatten(), J.flatten(), K.flatten()
+        ))
+        return grid.T
 
 
 def sample_points_list(d, m):
@@ -443,6 +457,19 @@ def sample_points_list(d, m):
         z = np.arange(d[2] + 1)
         h = np.arange(d[3] + 1)
         grid = np.meshgrid(x, y, z, h, sparse=True)
+        return grid
+    if m == 6:
+        x = np.arange(d[0] + 1)
+        y = np.arange(d[1] + 1)
+        z = np.arange(d[2] + 1)
+        h = np.arange(d[3] + 1)
+        j = np.arange(d[4] + 1)
+        k = np.arange(d[5] + 1)
+        X, Y, Z, H, J, K = np.meshgrid(x, y, z, h, j, k)
+        grid = np.vstack((
+            X.flatten(), Y.flatten(), Z.flatten(),
+            H.flatten(), J.flatten(), K.flatten()
+        ))
         return grid
 
 
