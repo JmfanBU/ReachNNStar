@@ -253,6 +253,10 @@ ACM Transactions on Embedded Computing Systems (TECS), 18:1–22, October 2019.
 [Towards Verification-Aware Knowledge Distillation for Neural-Network Controlled Systems](https://ieeexplore.ieee.org/abstract/document/8942059).
 International Conference on Computer Aided Design (ICCAD), November 2019.
 
+[3] J.Fan, C.Huang, X.Chen, W.Li, and Q.Zhu.
+[ReachNN*: A Tool for Reachability Analysis ofNeural-Network Controlled Systems](https://github.com/JmfanBU/ReachNNStar).
+The 18th International Symposium on Automated Technology for Verification and Analysis (ATVA), October 2020 (to appear).
+
 ## Common Issues
 ### m4: unrecognized option '--gnu'
 To fix this problem, try to reinstall m4 first
