@@ -65,16 +65,20 @@ if __name__ == '__main__':
 
     # define the ground truth
     nn = nn_config(args.filename, args.original_activation)
-    with tf.device('/device:GPU:0'):
+    with tf.device('/device:GPU:1'):
         y_true = args.scalar * (nn(x) - args.offset)
 
         # build the computation graph
         with tf.variable_scope('Graph') as scope:
             # define approximator
-            ua = univAprox(args.input_dim, args.output_dim,
+            ua = univAprox(args.input_dim - 2, args.output_dim,
                            args.hidden_dim, args.layers, args.activation,
                            scalar=args.ua_scalar, offset=args.ua_offset)
-            y = args.ua_scalar * (ua(x) - args.ua_offset)
+            A = tf.constant([[0, 0, 1, 0, 0],
+                             [0, 0, 0, 1, 0],
+                             [0, 0, 0, 0, 1]], dtype=tf.float32)
+            x_post = x @ tf.transpose(A)
+            y = args.ua_scalar * (ua(x_post) - args.ua_offset)
 
             # define the resulting loss and graph it using tensorboard
             scalar = args.ua_scalar
@@ -127,11 +131,16 @@ if __name__ == '__main__':
         sa_eps = simulated_annealing(T0=1)
         low_input = np.ones(args.input_dim) * 0
         high_input = np.ones(args.input_dim) * input_range
-        low_input[2] = -50
-        low_input[5] = -50
-        low_input[3] = 10
-        high_input[2] = 0
-        high_input[5] = 0
+        low_input[0] = 30
+        low_input[1] = 1.4
+        low_input[2] = -30
+        low_input[4] = -30
+
+        high_input[0] = 30
+        high_input[1] = 1.4
+        high_input[2] = 50
+        high_input[3] = 150
+        high_input[4] = 30
         while iters < max_it or current_loss > args.regression_bound:
             # sampel input from range
             x_in = np.random.uniform(low_input, high_input, [100000, args.input_dim])

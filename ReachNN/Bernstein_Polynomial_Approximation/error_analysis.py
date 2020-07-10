@@ -12,6 +12,8 @@ from numpy import linalg as LA
 from scipy.optimize import linprog
 from polyval import polyval
 
+os.environ["CUDA_VISIBLE_DEVICES"]="0";
+
 
 def nn_poly_approx_bernstein(
     f,
@@ -164,7 +166,6 @@ def bernstein_error_partition_cuda(
     print('Lipschitz constant: {}'.format(lips))
 
     all_comb_lists = sample_points_list(partition, input_dim)
-    print(all_comb_lists)
 
     if isinstance(lips, np.ndarray):
         lips = lips[0]
@@ -403,14 +404,14 @@ def degree_comb_lists(d, m):
         x = np.arange(d[0] + 1)
         y = np.arange(d[1] + 1)
         X, Y = np.meshgrid(x, y)
-        grid = np.vstack((X.flatten(), Y.flatten()))
+        grid = np.vstack((X.flatten(), Y.flatten())).astype(np.int8)
         return grid.T
     if m == 3:
         x = np.arange(d[0] + 1)
         y = np.arange(d[1] + 1)
         z = np.arange(d[2] + 1)
         X, Y, Z = np.meshgrid(x, y, z)
-        grid = np.vstack((X.flatten(), Y.flatten(), Z.flatten()))
+        grid = np.vstack((X.flatten(), Y.flatten(), Z.flatten())).astype(np.int8)
         return grid.T
     if m == 4:
         x = np.arange(d[0] + 1)
@@ -418,7 +419,7 @@ def degree_comb_lists(d, m):
         z = np.arange(d[2] + 1)
         h = np.arange(d[3] + 1)
         X, Y, Z, H = np.meshgrid(x, y, z, h)
-        grid = np.vstack((X.flatten(), Y.flatten(), Z.flatten(), H.flatten()))
+        grid = np.vstack((X.flatten(), Y.flatten(), Z.flatten(), H.flatten())).astype(np.int8)
         return grid.T
     if m == 6:
         x = np.arange(d[0] + 1)
@@ -431,7 +432,7 @@ def degree_comb_lists(d, m):
         grid = np.vstack((
             X.flatten(), Y.flatten(), Z.flatten(),
             H.flatten(), J.flatten(), K.flatten()
-        ))
+        )).astype(np.np.int8)
         return grid.T
 
 
@@ -446,16 +447,16 @@ def sample_points_list(d, m):
         grid = np.meshgrid(x, y, sparse=True)
         return grid
     if m == 3:
-        x = np.arange(d[0] + 1)
-        y = np.arange(d[1] + 1)
-        z = np.arange(d[2] + 1)
+        x = np.arange(d[0] + 1, dtype=np.int8)
+        y = np.arange(d[1] + 1, dtype=np.int8)
+        z = np.arange(d[2] + 1, dtype=np.int8)
         grid = np.meshgrid(x, y, z, sparse=True)
         return grid
     if m == 4:
-        x = np.arange(d[0] + 1)
-        y = np.arange(d[1] + 1)
-        z = np.arange(d[2] + 1)
-        h = np.arange(d[3] + 1)
+        x = np.arange(d[0] + 1, dtype=np.int8)
+        y = np.arange(d[1] + 1, dtype=np.int8)
+        z = np.arange(d[2] + 1, dtype=np.int8)
+        h = np.arange(d[3] + 1, dtype=np.int8)
         grid = np.meshgrid(x, y, z, h, sparse=True)
         return grid
     if m == 6:
@@ -469,7 +470,7 @@ def sample_points_list(d, m):
         grid = np.vstack((
             X.flatten(), Y.flatten(), Z.flatten(),
             H.flatten(), J.flatten(), K.flatten()
-        ))
+        )).astype(np.int8)
         return grid
 
 
