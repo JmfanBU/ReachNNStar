@@ -223,7 +223,7 @@ class NN(object):
             elif self.activation == 'sigmoid':
                 L *= 1/4
 
-        return (L - self.offset) * self.scale_factor
+        return L * self.scale_factor
 
     def tensorflow_representation(self, x, train=False, reuse=False):
         """
