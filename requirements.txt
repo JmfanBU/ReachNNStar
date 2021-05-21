@@ -1,4 +1,4 @@
-tensorflow==1.5.4
+tensorflow==2.5.0
 sympy
 mpi4py
 scipy
